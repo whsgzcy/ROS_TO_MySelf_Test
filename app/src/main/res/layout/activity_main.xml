@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.iwant.agv.agv2rostest04.MainActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/ip_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="输入IP" />
+
+            <Button
+                android:id="@+id/connect_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ip_edit"
+                android:text="connect" />
+
+            <Button
+                android:id="@+id/up_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/connect_btn"
+                android:layout_centerHorizontal="true"
+                android:text="上" />
+
+            <Button
+                android:id="@+id/stay_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/up_btn"
+                android:layout_centerHorizontal="true"
+                android:text="停" />
+
+            <Button
+                android:id="@+id/left_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/up_btn"
+                android:layout_toLeftOf="@+id/stay_btn"
+                android:text="左" />
+
+            <Button
+                android:id="@+id/right_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/up_btn"
+                android:layout_toRightOf="@+id/stay_btn"
+                android:text="右" />
+
+            <Button
+                android:id="@+id/down_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/stay_btn"
+                android:layout_centerHorizontal="true"
+                android:text="下" />
+
+            <TextView
+                android:id="@+id/state_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/down_btn"
+                android:text="设备信息" />
+
+            <TextView
+                android:id="@+id/state_info_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/state_text"
+                android:hint="loading..." />
+
+            <TextView
+                android:id="@+id/station_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/state_info_text"
+                android:text="站点信息" />
+
+            <TextView
+                android:id="@+id/station_info_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/station_text"
+                android:hint="loading..." />
+
+            <Button
+                android:id="@+id/test_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/station_info_text"
+                android:text="测试" />
+
+            <Button
+                android:id="@+id/test_navi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/test_state"
+                android:text="测试导航" />
+        </RelativeLayout>
+    </ScrollView>
+
+</LinearLayout>
