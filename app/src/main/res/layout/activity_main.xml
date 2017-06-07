@@ -108,6 +108,34 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/test_state"
                 android:text="测试导航" />
+
+            <Button
+                android:id="@+id/test_navi_a"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/test_state"
+                android:text="a点" />
+
+            <Button
+                android:id="@+id/test_navi_b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/test_navi_a"
+                android:text="b点" />
+
+            <Button
+                android:id="@+id/test_navi_c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/test_navi_b"
+                android:text="c点" />
+
+            <Button
+                android:id="@+id/test_navi_d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/test_navi_c"
+                android:text="d点" />
         </RelativeLayout>
     </ScrollView>
 

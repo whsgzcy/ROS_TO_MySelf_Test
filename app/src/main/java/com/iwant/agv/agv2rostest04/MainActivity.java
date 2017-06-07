@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.iwant.agv.agv2rostest04.model.Move_base_status;
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mStationText = (TextView) findViewById(R.id.station_info_text);
 
 //        mIPEdit.setText("ws://172.26.144.50:9090");
-        mIPEdit.setText("ws://192.168.3.11:9090");
+        mIPEdit.setText("ws://192.168.4.111:9090");
         // 控制小车
 //        mLeftBtn.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -69,36 +70,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //            }
 //        });
 
-//        mUpBtn.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                switch (event.getAction()) {
-//                    case MotionEvent.ACTION_DOWN:
-//                        processMoveTopic(1, 1);
-//                        break;
-//                    case MotionEvent.ACTION_UP:
-//                        processStopTopic();
-//                        break;
-//                }
-//                return false;
-//            }
-//        });
-//
-//        mDownBtn.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                switch (event.getAction()) {
-//                    case MotionEvent.ACTION_DOWN:
-//                        client.send("{\"op\":\"publish\",\"topic\":\"/cmd_vel\",\"msg\":" +
-//                                "{\"linear\":{\"x\":" + -1 + ",\"y\":0,\"z\":0},\"angular\":{\"x\":0,\"y\":0,\"z\":" + -1 + "}}}");
-//                        break;
-//                    case MotionEvent.ACTION_UP:
-//                        processStopTopic();
-//                        break;
-//                }
-//                return false;
-//            }
-//        });
+        mUpBtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        processMoveTopic(1, 1);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        processStopTopic();
+                        break;
+                }
+                return false;
+            }
+        });
+
+        mDownBtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        client.send("{\"op\":\"publish\",\"topic\":\"/cmd_vel\",\"msg\":" +
+                                "{\"linear\":{\"x\":" + -1 + ",\"y\":0,\"z\":0},\"angular\":{\"x\":0,\"y\":0,\"z\":" + -1 + "}}}");
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        processStopTopic();
+                        break;
+                }
+                return false;
+            }
+        });
 
         mLeftBtn.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -107,36 +108,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     case MotionEvent.ACTION_DOWN:
                         processMoveTopic(0, 1);
                         break;
-//                    case MotionEvent.ACTION_UP:
-//                        processStopTopic();
-//                        break;
+                    case MotionEvent.ACTION_UP:
+                        processStopTopic();
+                        break;
                 }
                 return false;
             }
         });
 
-//        mRightBtn.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                switch (event.getAction()) {
-//                    case MotionEvent.ACTION_DOWN:
-//                        client.send("{\"op\":\"publish\",\"topic\":\"/cmd_vel\",\"msg\":" +
-//                                "{\"linear\":{\"x\":" + 0 + ",\"y\":0,\"z\":0},\"angular\":{\"x\":-1,\"y\":0,\"z\":" + -1 + "}}}");
-//                        break;
-//                    case MotionEvent.ACTION_UP:
-//                        processStopTopic();
-//                        break;
-//                }
-//                return false;
-//            }
-//        });
-//
-//        mStopBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                processStopTopic();
-//            }
-//        });
+        mRightBtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        client.send("{\"op\":\"publish\",\"topic\":\"/cmd_vel\",\"msg\":" +
+                                "{\"linear\":{\"x\":" + 0 + ",\"y\":0,\"z\":0},\"angular\":{\"x\":-1,\"y\":0,\"z\":" + -1 + "}}}");
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        processStopTopic();
+                        break;
+                }
+                return false;
+            }
+        });
+
+        mStopBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                processStopTopic();
+            }
+        });
 
         mTestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,70 +161,78 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        mNaviTestBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (client == null) return;
-                // /move_base/goal
-                String goal_id = move_base_status.getStatus_list().get(0).getGoal_id().getId();
-                int goal_id_stamp_secs = move_base_status.getStatus_list().get(0).getGoal_id().getStamp().getSecs();
-                int goal_id_stamp_nsecs = move_base_status.getStatus_list().get(0).getGoal_id().getStamp().getNsecs();
-                int header_seq = move_base_status.getHeader().getSeq();
-                int header_stamp_secs = move_base_status.getHeader().getStamp().getSecs();
-                int header_stamp_nsecs = move_base_status.getHeader().getStamp().getNsecs();
-                String msg = "{\n" +
-                        "    \"op\": \"publish\",\n" +
-                        "    \"topic\": \"/move_base/goal\",\n" +
-                        "    \"msg\": {\n" +
-                        "        \"header\": {\n" +
-                        "            \"seq\": " + header_seq + ",\n" +
-                        "            \"stamp\": {\n" +
-                        "                \"secs\": " + header_stamp_secs + ",\n" +
-                        "                \"nsecs\": " + header_stamp_nsecs + "\n" +
-                        "            },\n" +
-                        "            \"frame_id\": \"\"\n" +
-                        "        },\n" +
-                        "        \"goal_id\": {\n" +
-                        "            \"stamp\": {\n" +
-                        "                \"secs\": " + goal_id_stamp_secs + ",\n" +
-                        "                \"nsecs\": " + goal_id_stamp_nsecs + "\n" +
-                        "            },\n" +
-                        "            \"id\": \"" + goal_id + "\n" +
-                        "        },\n" +
-                        "        \"goal\": {\n" +
-                        "            \"target_pose\": {\n" +
-                        "                \"header\": {\n" +
-                        "                    \"seq\": 4,\n" +
-                        "                    \"stamp\": {\n" +
-                        "                        \"secs\": 1494482836,\n" +
-                        "                        \"nsecs\": 594048023\n" +
-                        "                    },\n" +
-                        "                    \"frame_id\": \"map\"\n" +
-                        "                },\n" +
-                        "                \"pose\": {\n" +
-                        "                    \"position\": {\n" +
-                        "                        \"z\": 0,\n" +
-                        "                        \"y\": 0.059577807928737736,\n" +
-                        "                        \"x\": -0.23101512046212858\n" +
-                        "                    },\n" +
-                        "                    \"orientation\": {\n" +
-                        "                        \"w\": 0.9994535234062796,\n" +
-                        "                        \"z\": -0.030639017710174105,\n" +
-                        "                        \"y\": 0,\n" +
-                        "                        \"x\": 0\n" +
-                        "                    }\n" +
-                        "                }\n" +
-                        "            }\n" +
-                        "        }\n" +
-                        "    }\n" +
-                        "}";
-                Log.d(TAG, "send /move_base/goal msg " + msg);
-                client.send(msg);
-            }
-        });
+//        mNaviTestBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (client == null) return;
+//                // /move_base/goal
+//                String goal_id = move_base_status.getStatus_list().get(0).getGoal_id().getId();
+//                int goal_id_stamp_secs = move_base_status.getStatus_list().get(0).getGoal_id().getStamp().getSecs();
+//                int goal_id_stamp_nsecs = move_base_status.getStatus_list().get(0).getGoal_id().getStamp().getNsecs();
+//                int header_seq = move_base_status.getHeader().getSeq();
+//                int header_stamp_secs = move_base_status.getHeader().getStamp().getSecs();
+//                int header_stamp_nsecs = move_base_status.getHeader().getStamp().getNsecs();
+//                String msg = "{\n" +
+//                        "    \"op\": \"publish\",\n" +
+//                        "    \"topic\": \"/move_base/goal\",\n" +
+//                        "    \"msg\": {\n" +
+//                        "        \"header\": {\n" +
+//                        "            \"seq\": " + header_seq + ",\n" +
+//                        "            \"stamp\": {\n" +
+//                        "                \"secs\": " + header_stamp_secs + ",\n" +
+//                        "                \"nsecs\": " + header_stamp_nsecs + "\n" +
+//                        "            },\n" +
+//                        "            \"frame_id\": \"\"\n" +
+//                        "        },\n" +
+//                        "        \"goal_id\": {\n" +
+//                        "            \"stamp\": {\n" +
+//                        "                \"secs\": " + goal_id_stamp_secs + ",\n" +
+//                        "                \"nsecs\": " + goal_id_stamp_nsecs + "\n" +
+//                        "            },\n" +
+//                        "            \"id\": \"" + goal_id + "\n" +
+//                        "        },\n" +
+//                        "        \"goal\": {\n" +
+//                        "            \"target_pose\": {\n" +
+//                        "                \"header\": {\n" +
+//                        "                    \"seq\": 4,\n" +
+//                        "                    \"stamp\": {\n" +
+//                        "                        \"secs\": 1494482836,\n" +
+//                        "                        \"nsecs\": 594048023\n" +
+//                        "                    },\n" +
+//                        "                    \"frame_id\": \"map\"\n" +
+//                        "                },\n" +
+//                        "                \"pose\": {\n" +
+//                        "                    \"position\": {\n" +
+//                        "                        \"z\": 0,\n" +
+//                        "                        \"y\": 0.059577807928737736,\n" +
+//                        "                        \"x\": -0.23101512046212858\n" +
+//                        "                    },\n" +
+//                        "                    \"orientation\": {\n" +
+//                        "                        \"w\": 0.9994535234062796,\n" +
+//                        "                        \"z\": -0.030639017710174105,\n" +
+//                        "                        \"y\": 0,\n" +
+//                        "                        \"x\": 0\n" +
+//                        "                    }\n" +
+//                        "                }\n" +
+//                        "            }\n" +
+//                        "        }\n" +
+//                        "    }\n" +
+//                        "}";
+//                Log.d(TAG, "send /move_base/goal msg " + msg);
+//                client.send(msg);
+//            }
+//        });
 
+
+        Button mABtn = (Button) findViewById(R.id.test_navi_a);
+        Button mBBtn = (Button) findViewById(R.id.test_navi_b);
+        Button mCBtn = (Button) findViewById(R.id.test_navi_c);
+        Button mDBtn = (Button) findViewById(R.id.test_navi_d);
+        mABtn.setOnClickListener(this);
+        mBBtn.setOnClickListener(this);
+        mCBtn.setOnClickListener(this);
+        mDBtn.setOnClickListener(this);
     }
-
 
     @Override
     public void onClick(View v) {
@@ -233,6 +242,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.connect_btn:
                 mWSURL = mIPEdit.getText().toString().trim();
                 connect(mWSURL);
+                break;
+            case R.id.test_navi_a:
+                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_aa\"}}");
+                break;
+            case R.id.test_navi_b:
+                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_bb\"}}");
+                break;
+            case R.id.test_navi_c:
+                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_cc\"}}");
+                break;
+            case R.id.test_navi_d:
+                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_dd\"}}");
                 break;
         }
     }
@@ -316,6 +337,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d(TAG, "Connect ROS success");
                 message.what = 1;
                 mHandler.sendMessage(message);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity.this, "连接成功", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             @Override
