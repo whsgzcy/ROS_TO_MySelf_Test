@@ -20,7 +20,9 @@ import com.jilk.ros.rosbridge.ROSBridgeClient;
 import net.whsgzcy.rosclient.RCApplication;
 import net.whsgzcy.rosclient.entity.PublishEvent;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mConnectBtn;
     private Button mUpBtn, mDownBtn, mLeftBtn, mRightBtn, mStopBtn;
     private Button mTestBtn, mNaviTestBtn;
+    private Button mPowerBtn;
     private TextView mStateText, mStationText;
 
     private ROSBridgeClient client;
@@ -60,8 +63,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mStateText = (TextView) findViewById(R.id.state_info_text);
         mStationText = (TextView) findViewById(R.id.station_info_text);
 
-//        mIPEdit.setText("ws://172.26.144.50:9090");
-        mIPEdit.setText("ws://192.168.4.111:9090");
+        // 获取电量按钮
+        mPowerBtn = (Button) findViewById(R.id.power);
+        mPowerBtn.setOnClickListener(this);
+
+        mIPEdit.setText("ws://192.168.4.11:9090");
+//        mIPEdit.setText("ws://192.168.4.11:9090");
         // 控制小车
 //        mLeftBtn.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -156,7 +163,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                String msg = "{\"op\":\"publish\",\"topic\":\"" + "/cmd_string" + "\",\"msg\":{"+"cancel"+"}}";
 //                client.send(" {\"op\":\"publish\",\"topic\":\"/cmd_string\",\"msg\":{\"data\":\"cancel\"}}");
 //                client.send("{\"op\":\"subscribe\",\"topic\":\"" + "/nav_ctrl" + "\"}");
-                client.send("{\"op\":\"subscribe\",\"topic\":\"" + "/waypoints" + "\"}");
+//                client.send("{\"op\":\"subscribe\",\"topic\":\"" + "/waypoints" + "\"}");
+                client.send("{\"op\":\"subscribe\",\"topic\":\"" + "/nav_ctrl_status" + "\"}");
                 Log.d(TAG, "testOnClick()");
             }
         });
@@ -240,20 +248,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             // 连接 IP
             case R.id.connect_btn:
+                mIPEdit.setText("ws://192.168.4.11:9090");
                 mWSURL = mIPEdit.getText().toString().trim();
                 connect(mWSURL);
                 break;
             case R.id.test_navi_a:
-                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_aa\"}}");
+                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_a\"}}");
                 break;
             case R.id.test_navi_b:
-                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_bb\"}}");
+                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_b\"}}");
                 break;
             case R.id.test_navi_c:
                 client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_cc\"}}");
                 break;
             case R.id.test_navi_d:
                 client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_dd\"}}");
+                break;
+            case R.id.power:
+//                String msg = "{" + "  \"op\": \"subscribe\"," + "\"topic\": \"/rosnodejs/charging_status\"" + "}";
+//                String msg = "{" + "  \"op\": \"subscribe\"," + "\"topic\": \"/rosnodejs/robot_status\"" + "}";
+                String msg = "{" + "\"op\": \"subscribe\"," + "\"topic\": \"/rosnodejs/robot_status\"," + "\"throttle_rate\": 3000" + "}";
+                client.send(msg);
                 break;
         }
     }
@@ -363,7 +378,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     //Receive data from ROS server, send from ROSBridgeWebSocketClient onMessage()
-    public void onEvent(final PublishEvent event) {
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMain(final PublishEvent event) {
         if ("/map".equals(event.name)) {
             return;
         }
@@ -376,6 +392,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (event.name.equals("/move_base/status")) {
             Gson gson = new Gson();
             move_base_status = gson.fromJson(event.msg, Move_base_status.class);
+        }
+
+        // 事实的数据 为单点导航使用
+        if (event.name.equals("/nav_ctrl_status")) {
+
+
         }
     }
 

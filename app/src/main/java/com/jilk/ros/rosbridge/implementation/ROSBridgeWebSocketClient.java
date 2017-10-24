@@ -28,6 +28,7 @@ import com.jilk.ros.rosbridge.operation.ServiceResponse;
 
 import net.whsgzcy.rosclient.entity.PublishEvent;
 
+import org.greenrobot.eventbus.EventBus;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.framing.CloseFrame;
 import org.java_websocket.handshake.ServerHandshake;
@@ -40,8 +41,6 @@ import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.channels.SocketChannel;
-
-import de.greenrobot.event.EventBus;
 
 
 public class ROSBridgeWebSocketClient extends WebSocketClient {

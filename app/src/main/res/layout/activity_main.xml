@@ -136,6 +136,13 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/test_navi_c"
                 android:text="d点" />
+
+            <Button
+                android:id="@+id/power"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/test_navi_c"
+                android:text="获取电量 charging_status / robot_status 结点" />
         </RelativeLayout>
     </ScrollView>
 
