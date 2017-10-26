@@ -13,6 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.helper.NavHelper;
+import com.helper.Nav_Ctrl_StautsResult;
 import com.iwant.agv.agv2rostest04.model.Move_base_status;
 import com.jilk.ros.ROSClient;
 import com.jilk.ros.rosbridge.ROSBridgeClient;
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText mIPEdit;
     private Button mConnectBtn;
     private Button mUpBtn, mDownBtn, mLeftBtn, mRightBtn, mStopBtn;
-    private Button mTestBtn, mNaviTestBtn;
+    private Button mTestBtn;
     private Button mPowerBtn;
     private TextView mStateText, mStationText;
 
@@ -40,6 +42,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Move_base_status move_base_status;
 
     private String mWSURL;
+
+    private  Button mState;
+    private TextView mStateTextView;
+
+    // 测试按钮
+    private Button mTextNavBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mStopBtn = (Button) findViewById(R.id.stay_btn);
 
         mTestBtn = (Button) findViewById(R.id.test_state);
-        mNaviTestBtn = (Button) findViewById(R.id.test_navi);
 
         mStateText = (TextView) findViewById(R.id.state_info_text);
         mStationText = (TextView) findViewById(R.id.station_info_text);
@@ -236,10 +243,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button mBBtn = (Button) findViewById(R.id.test_navi_b);
         Button mCBtn = (Button) findViewById(R.id.test_navi_c);
         Button mDBtn = (Button) findViewById(R.id.test_navi_d);
+        Button mEBtn = (Button) findViewById(R.id.test_navi_e);
+        Button mFBtn = (Button) findViewById(R.id.test_navi_f);
         mABtn.setOnClickListener(this);
         mBBtn.setOnClickListener(this);
         mCBtn.setOnClickListener(this);
         mDBtn.setOnClickListener(this);
+        mEBtn.setOnClickListener(this);
+        mFBtn.setOnClickListener(this);
+
+        // 导航状态
+        mState = (Button)findViewById(R.id.nav_state);
+        mState.setOnClickListener(this);
+        mStateTextView = (TextView)findViewById(R.id.nav_state_text);
     }
 
     @Override
@@ -253,22 +269,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 connect(mWSURL);
                 break;
             case R.id.test_navi_a:
-                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_a\"}}");
+                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_A_601\"}}");
                 break;
             case R.id.test_navi_b:
-                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_b\"}}");
+                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_A_602\"}}");
                 break;
             case R.id.test_navi_c:
-                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_cc\"}}");
+                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_A_603\"}}");
                 break;
             case R.id.test_navi_d:
-                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_dd\"}}");
+                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_B_604\"}}");
+                break;
+            case R.id.test_navi_e:
+                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_B_605\"}}");
+                break;
+            case R.id.test_navi_f:
+                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"pose_6_A_O\"}}");
                 break;
             case R.id.power:
 //                String msg = "{" + "  \"op\": \"subscribe\"," + "\"topic\": \"/rosnodejs/charging_status\"" + "}";
 //                String msg = "{" + "  \"op\": \"subscribe\"," + "\"topic\": \"/rosnodejs/robot_status\"" + "}";
                 String msg = "{" + "\"op\": \"subscribe\"," + "\"topic\": \"/rosnodejs/robot_status\"," + "\"throttle_rate\": 3000" + "}";
                 client.send(msg);
+                break;
+            case R.id.nav_state:
+                client.send(NavHelper.getNavStatus());
                 break;
         }
     }
@@ -395,9 +420,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         // 事实的数据 为单点导航使用
+        if (event.name.equals("/move_base/status")) {
+            Gson gson = new Gson();
+            move_base_status = gson.fromJson(event.msg, Move_base_status.class);
+        }
+
+        // 事实的数据 为单点导航使用
         if (event.name.equals("/nav_ctrl_status")) {
+            mStateTextView.setText(event.msg);
 
-
+            final Nav_Ctrl_StautsResult nav_ctrl_statusResult = new Gson().fromJson(event.msg, Nav_Ctrl_StautsResult.class);
+            int status = nav_ctrl_statusResult.getStatus();
+            if(status == 3){
+                String name = nav_ctrl_statusResult.getWaypoint_name();
+                if(name.equals("map_6_A_601")){
+                    client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_B_605\"}}");
+                }else if(name.equals("map_6_B_605")){
+                    client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_A_601\"}}");
+                }
+            }
         }
     }
 

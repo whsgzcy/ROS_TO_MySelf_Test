@@ -102,47 +102,83 @@
                 android:layout_below="@+id/station_info_text"
                 android:text="测试" />
 
-            <Button
-                android:id="@+id/test_navi"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/test_state"
-                android:text="测试导航" />
 
             <Button
                 android:id="@+id/test_navi_a"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/test_state"
-                android:text="a点" />
+                android:text="map_6_A_601 点" />
 
             <Button
                 android:id="@+id/test_navi_b"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/test_navi_a"
-                android:text="b点" />
+                android:text="map_6_A_602 点" />
 
             <Button
                 android:id="@+id/test_navi_c"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/test_navi_b"
-                android:text="c点" />
+                android:text="map_6_A_603 点" />
 
             <Button
                 android:id="@+id/test_navi_d"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/test_navi_c"
-                android:text="d点" />
+                android:text="map_6_B_604 点" />
+
+            <Button
+                android:id="@+id/test_navi_e"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/test_navi_d"
+                android:text=" map_6_B_605 点" />
+
+            <Button
+                android:id="@+id/test_navi_f"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/test_navi_e"
+                android:text="去充电" />
+
+            <!--<Button-->
+            <!--android:id="@+id/test_navi_d"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@+id/test_navi_c"-->
+            <!--android:text="d点" />-->
 
             <Button
                 android:id="@+id/power"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/test_navi_c"
+                android:layout_below="@+id/test_navi_f"
                 android:text="获取电量 charging_status / robot_status 结点" />
+
+            <Button
+                android:id="@+id/nav_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/power"
+                android:text="获取导航状态" />
+
+            <TextView
+                android:id="@+id/nav_state_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/nav_state"
+                />
+
+            <Button
+                android:id="@+id/ceshi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/nav_state_text"
+                android:text="开始测试" />
         </RelativeLayout>
     </ScrollView>
 
