@@ -18,6 +18,9 @@ import com.helper.Nav_Ctrl_StautsResult;
 import com.iwant.agv.agv2rostest04.model.Move_base_status;
 import com.jilk.ros.ROSClient;
 import com.jilk.ros.rosbridge.ROSBridgeClient;
+import com.map.WayPointUtil;
+import com.nav.Move_Base_Goal;
+import com.nav.NavPublich;
 
 import net.whsgzcy.rosclient.RCApplication;
 import net.whsgzcy.rosclient.entity.PublishEvent;
@@ -25,6 +28,10 @@ import net.whsgzcy.rosclient.entity.PublishEvent;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -43,11 +50,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private String mWSURL;
 
-    private  Button mState;
+    private Button mState;
     private TextView mStateTextView;
 
-    // 测试按钮
-    private Button mTextNavBtn;
+    // 导航publish
+    private NavPublich mNavPublich = new NavPublich();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +72,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mRightBtn = (Button) findViewById(R.id.right_btn);
         mStopBtn = (Button) findViewById(R.id.stay_btn);
 
-        mTestBtn = (Button) findViewById(R.id.test_state);
+        mTestBtn = (Button) findViewById(R.id.ansy_data);
+        mTestBtn.setOnClickListener(this);
 
         mStateText = (TextView) findViewById(R.id.state_info_text);
         mStationText = (TextView) findViewById(R.id.station_info_text);
@@ -152,30 +160,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 processStopTopic();
             }
         });
-
-        mTestBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // /move_base/feedback
-                // /nav_ctrl_status
-                // /nav_ctrl
-                // /waypoint_markers
-                // /waypoints
-                // /trajectory_markers
-                // /cmd_string
-                // /move_base/status
-                if (client == null) return;
-//                client.send("{\"op\":\"subscribe\",\"topic\":\"" + "/waypoint_markers" + "\"}");
-//                client.send("{\"op\":\"subscribe\",\"topic\":\"" + "/waypoint_markers" + "\"}");
-//                String msg = "{\"op\":\"publish\",\"topic\":\"" + "/cmd_string" + "\",\"msg\":{"+"cancel"+"}}";
-//                client.send(" {\"op\":\"publish\",\"topic\":\"/cmd_string\",\"msg\":{\"data\":\"cancel\"}}");
-//                client.send("{\"op\":\"subscribe\",\"topic\":\"" + "/nav_ctrl" + "\"}");
-//                client.send("{\"op\":\"subscribe\",\"topic\":\"" + "/waypoints" + "\"}");
-                client.send("{\"op\":\"subscribe\",\"topic\":\"" + "/nav_ctrl_status" + "\"}");
-                Log.d(TAG, "testOnClick()");
-            }
-        });
-
 //        mNaviTestBtn.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -253,9 +237,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mFBtn.setOnClickListener(this);
 
         // 导航状态
-        mState = (Button)findViewById(R.id.nav_state);
+        mState = (Button) findViewById(R.id.nav_state);
         mState.setOnClickListener(this);
-        mStateTextView = (TextView)findViewById(R.id.nav_state_text);
+        mStateTextView = (TextView) findViewById(R.id.nav_state_text);
     }
 
     @Override
@@ -295,6 +279,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.nav_state:
                 client.send(NavHelper.getNavStatus());
                 break;
+            // 同步站点数据
+            case R.id.ansy_data:
+                client.send("{ \"op\": \"subscribe\", \"topic\": \"/waypoints\"}");
+                break;
         }
     }
 
@@ -319,47 +307,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         return super.dispatchTouchEvent(ev);
     }
-//
-//    private Timer mTimer;
-//    private TimerTask mTimerTask;
-//    private void connect(final String wsUrl){
-//        Log.d(TAG, "connect()");
-//        mTimer = new Timer();
-//        mTimerTask = new TimerTask() {
-//            @Override
-//            public void run() {
-//                // ros连接成功 则不往下执行
-//                if(client != null){
-//                    if(client.connect()) return;
-//                }
-//                final Message message = new Message();
-//                client = new ROSBridgeClient(wsUrl);
-//                client.connect(new ROSClient.ConnectionStatusListener() {
-//                    @Override
-//                    public void onConnect() {
-//                        client.setDebug(true);
-//                        ((RCApplication) getApplication()).setRosClient(client);
-//                        Log.d(TAG, "Connect ROS success");
-//                        message.what = 1;
-//                        mHandler.sendMessage(message);
-//                    }
-//                    @Override
-//                    public void onDisconnect(boolean normal, String reason, int code) {
-//                        message.what = 2;
-//                        mHandler.sendMessage(message);
-//                        Log.d(TAG, "ROS disconnect");
-//                    }
-//                    @Override
-//                    public void onError(Exception ex) {
-//                        ex.printStackTrace();
-//                        Log.d(TAG, "ROS communication error");
-//                    }
-//                });
-//            }
-//        };
-//        //开始一个定时任务
-//        mTimer.schedule(mTimerTask, 1000, 1500);
-//    }
 
     private void connect(String wsUrl) {
         Log.d(TAG, "connect()");
@@ -421,25 +368,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // 事实的数据 为单点导航使用
         if (event.name.equals("/move_base/status")) {
-            Gson gson = new Gson();
-            move_base_status = gson.fromJson(event.msg, Move_base_status.class);
+            move_base_status = new Gson().fromJson(event.msg, Move_base_status.class);
         }
 
-        // 事实的数据 为单点导航使用
-        if (event.name.equals("/nav_ctrl_status")) {
-            mStateTextView.setText(event.msg);
+        if(event.name.equals("/waypoints")){
+            // 将返回的数据生成实体类
+            WayPointUtil wayPointUtil = new Gson().fromJson(event.msg, WayPointUtil.class);
+            // mNavPublich 赋值
+            List<String> mWayPointsNamesList = new ArrayList<String>();
+            HashMap<String, Move_base_status> mNavPublishHashMap = new HashMap<String, Move_base_status>();
 
-            final Nav_Ctrl_StautsResult nav_ctrl_statusResult = new Gson().fromJson(event.msg, Nav_Ctrl_StautsResult.class);
-            int status = nav_ctrl_statusResult.getStatus();
-            if(status == 3){
-                String name = nav_ctrl_statusResult.getWaypoint_name();
-                if(name.equals("map_6_A_601")){
-                    client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_B_605\"}}");
-                }else if(name.equals("map_6_B_605")){
-                    client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_A_601\"}}");
-                }
+            for(int i = 0; i < wayPointUtil.getWaypoints().size(); i++){
+
+                String wayPointName = wayPointUtil.getWaypoints().get(i).getName();
+                mWayPointsNamesList.add(wayPointName);
+
+                Move_Base_Goal mbg = new Move_Base_Goal();
+
+
+
+
             }
+
+
         }
+
+
     }
 
     Handler mHandler = new Handler() {

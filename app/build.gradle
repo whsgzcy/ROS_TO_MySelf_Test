@@ -34,4 +34,6 @@ dependencies {
 
     compile 'org.greenrobot:eventbus:3.0.0'
 
+    compile project(':super_frefser_library')
+
 }

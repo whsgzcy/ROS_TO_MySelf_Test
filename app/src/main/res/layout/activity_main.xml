@@ -96,18 +96,18 @@
                 android:hint="loading..." />
 
             <Button
-                android:id="@+id/test_state"
+                android:id="@+id/ansy_data"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/station_info_text"
-                android:text="测试" />
+                android:text="开始同步站点数据" />
 
 
             <Button
                 android:id="@+id/test_navi_a"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/test_state"
+                android:layout_below="@+id/ansy_data"
                 android:text="map_6_A_601 点" />
 
             <Button

@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AGV2ROSTest04.iml" filepath="$PROJECT_DIR$/AGV2ROSTest04.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/super_frefser_library/super_frefser_library.iml" filepath="$PROJECT_DIR$/super_frefser_library/super_frefser_library.iml" />
     </modules>
   </component>
 </project>
