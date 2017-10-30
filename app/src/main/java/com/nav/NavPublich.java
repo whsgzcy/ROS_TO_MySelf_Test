@@ -13,7 +13,7 @@ public class NavPublich {
 
     private List<String> wayPointsNames;
 
-    private HashMap<String, Move_Base_Goal> navPublishHashMap;
+    private HashMap<String, TMove_Base_Goal> navPublishHashMap;
 
     public List<String> getWayPointsNames() {
         return wayPointsNames;
@@ -23,11 +23,16 @@ public class NavPublich {
         this.wayPointsNames = wayPointsNames;
     }
 
-    public HashMap<String, Move_Base_Goal> getNavPublishHashMap() {
+    public HashMap<String, TMove_Base_Goal> getNavPublishHashMap() {
         return navPublishHashMap;
     }
 
-    public void setNavPublishHashMap(HashMap<String, Move_Base_Goal> navPublishHashMap) {
+    public void setNavPublishHashMap(HashMap<String, TMove_Base_Goal> navPublishHashMap) {
         this.navPublishHashMap = navPublishHashMap;
+    }
+
+    public void clear() {
+        if (wayPointsNames != null) wayPointsNames.clear();
+        if (navPublishHashMap != null) navPublishHashMap.clear();
     }
 }

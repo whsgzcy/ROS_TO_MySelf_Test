@@ -5,33 +5,15 @@ package com.nav;
  */
 
 public class Move_Base_Goal {
-
     /**
+     * msg : {"target_pose":{"header":{"frame_id":"/map"},"pose":{"w":0.72508,"x":0.00455891,"y":0.0110448,"z":-0.688561}},"base_position":{"header":{"frame_id":"/map"},"pose":{"x":-5.56034,"y":0.543951,"z":2.96803E-4}}}
      * op : publish
      * topic : /move_base/goal
-     * page : 88
-     * msg : {"target_pose":{"header":{"frame_id":"/map"},"pose":{"z":-0.695688,"x":7.28705E-4,"w":0.71834,"y":0.00213251}},"target_position":{"header":{"frame_id":"/map"},"pose":{"z":0.00984454,"x":-0.0483838,"y":-0.00480753}}}
      */
 
-    private String op;
-    private String topic;
     private MsgBean msg;
-
-    public String getOp() {
-        return op;
-    }
-
-    public void setOp(String op) {
-        this.op = op;
-    }
-
-    public String getTopic() {
-        return topic;
-    }
-
-    public void setTopic(String topic) {
-        this.topic = topic;
-    }
+    private String op = "publish";
+    private String topic = "/move_base/goal";
 
     public MsgBean getMsg() {
         return msg;
@@ -41,14 +23,22 @@ public class Move_Base_Goal {
         this.msg = msg;
     }
 
+    public String getOp() {
+        return op;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
     public static class MsgBean {
         /**
-         * target_pose : {"header":{"frame_id":"/map"},"pose":{"z":-0.695688,"x":7.28705E-4,"w":0.71834,"y":0.00213251}}
-         * target_position : {"header":{"frame_id":"/map"},"pose":{"z":0.00984454,"x":-0.0483838,"y":-0.00480753}}
+         * target_pose : {"header":{"frame_id":"/map"},"pose":{"w":0.72508,"x":0.00455891,"y":0.0110448,"z":-0.688561}}
+         * base_position : {"header":{"frame_id":"/map"},"pose":{"x":-5.56034,"y":0.543951,"z":2.96803E-4}}
          */
 
         private TargetPoseBean target_pose;
-        private TargetPositionBean target_position;
+        private BasePositionBean base_position;
 
         public TargetPoseBean getTarget_pose() {
             return target_pose;
@@ -58,18 +48,18 @@ public class Move_Base_Goal {
             this.target_pose = target_pose;
         }
 
-        public TargetPositionBean getTarget_position() {
-            return target_position;
+        public BasePositionBean getBase_position() {
+            return base_position;
         }
 
-        public void setTarget_position(TargetPositionBean target_position) {
-            this.target_position = target_position;
+        public void setBase_position(BasePositionBean base_position) {
+            this.base_position = base_position;
         }
 
         public static class TargetPoseBean {
             /**
              * header : {"frame_id":"/map"}
-             * pose : {"z":-0.695688,"x":7.28705E-4,"w":0.71834,"y":0.00213251}
+             * pose : {"w":0.72508,"x":0.00455891,"y":0.0110448,"z":-0.688561}
              */
 
             private HeaderBean header;
@@ -96,36 +86,32 @@ public class Move_Base_Goal {
                  * frame_id : /map
                  */
 
-                private String frame_id;
+                private String frame_id = "/map";
 
                 public String getFrame_id() {
                     return frame_id;
-                }
-
-                public void setFrame_id(String frame_id) {
-                    this.frame_id = frame_id;
                 }
             }
 
             public static class PoseBean {
                 /**
-                 * z : -0.695688
-                 * x : 7.28705E-4
-                 * w : 0.71834
-                 * y : 0.00213251
+                 * w : 0.72508
+                 * x : 0.00455891
+                 * y : 0.0110448
+                 * z : -0.688561
                  */
 
-                private double z;
-                private double x;
                 private double w;
+                private double x;
                 private double y;
+                private double z;
 
-                public double getZ() {
-                    return z;
+                public double getW() {
+                    return w;
                 }
 
-                public void setZ(double z) {
-                    this.z = z;
+                public void setW(double w) {
+                    this.w = w;
                 }
 
                 public double getX() {
@@ -136,14 +122,6 @@ public class Move_Base_Goal {
                     this.x = x;
                 }
 
-                public double getW() {
-                    return w;
-                }
-
-                public void setW(double w) {
-                    this.w = w;
-                }
-
                 public double getY() {
                     return y;
                 }
@@ -151,13 +129,21 @@ public class Move_Base_Goal {
                 public void setY(double y) {
                     this.y = y;
                 }
+
+                public double getZ() {
+                    return z;
+                }
+
+                public void setZ(double z) {
+                    this.z = z;
+                }
             }
         }
 
-        public static class TargetPositionBean {
+        public static class BasePositionBean {
             /**
              * header : {"frame_id":"/map"}
-             * pose : {"z":0.00984454,"x":-0.0483838,"y":-0.00480753}
+             * pose : {"x":-5.56034,"y":0.543951,"z":2.96803E-4}
              */
 
             private HeaderBeanX header;
@@ -184,35 +170,23 @@ public class Move_Base_Goal {
                  * frame_id : /map
                  */
 
-                private String frame_id;
+                private String frame_id = "/map";
 
                 public String getFrame_id() {
                     return frame_id;
-                }
-
-                public void setFrame_id(String frame_id) {
-                    this.frame_id = frame_id;
                 }
             }
 
             public static class PoseBeanX {
                 /**
-                 * z : 0.00984454
-                 * x : -0.0483838
-                 * y : -0.00480753
+                 * x : -5.56034
+                 * y : 0.543951
+                 * z : 2.96803E-4
                  */
 
-                private double z;
                 private double x;
                 private double y;
-
-                public double getZ() {
-                    return z;
-                }
-
-                public void setZ(double z) {
-                    this.z = z;
-                }
+                private double z;
 
                 public double getX() {
                     return x;
@@ -229,9 +203,19 @@ public class Move_Base_Goal {
                 public void setY(double y) {
                     this.y = y;
                 }
+
+                public double getZ() {
+                    return z;
+                }
+
+                public void setZ(double z) {
+                    this.z = z;
+                }
             }
         }
     }
+
+
 //    {
 //        "op": "publish",
 //            "topic": "/move_base/goal",
@@ -247,7 +231,7 @@ public class Move_Base_Goal {
 //                        "y": 0.00213251
 //            }
 //        },
-//        "target_position": {
+//        "base_position": {
 //            "header": {
 //                "frame_id": "/map"
 //            },

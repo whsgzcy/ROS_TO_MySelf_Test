@@ -21,6 +21,7 @@ import com.jilk.ros.rosbridge.ROSBridgeClient;
 import com.map.WayPointUtil;
 import com.nav.Move_Base_Goal;
 import com.nav.NavPublich;
+import com.nav.TMove_Base_Goal;
 
 import net.whsgzcy.rosclient.RCApplication;
 import net.whsgzcy.rosclient.entity.PublishEvent;
@@ -253,22 +254,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 connect(mWSURL);
                 break;
             case R.id.test_navi_a:
-                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_A_601\"}}");
+//                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_A_601\"}}");
+                String t = new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_6_A_601"));
+                client.send(t);
                 break;
             case R.id.test_navi_b:
-                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_A_602\"}}");
+//                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_A_602\"}}");
+                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_6_A_602")));
                 break;
             case R.id.test_navi_c:
-                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_A_603\"}}");
+//                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_A_603\"}}");
+                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_6_A_603")));
                 break;
             case R.id.test_navi_d:
-                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_B_604\"}}");
+//                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_B_604\"}}");
+                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_6_B_604")));
                 break;
             case R.id.test_navi_e:
-                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_B_605\"}}");
+//                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_B_605\"}}");
+                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_6_B_605")));
                 break;
             case R.id.test_navi_f:
-                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"pose_6_A_O\"}}");
+//                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"pose_6_A_O\"}}");
+                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("pose_6_A_O")));
                 break;
             case R.id.power:
 //                String msg = "{" + "  \"op\": \"subscribe\"," + "\"topic\": \"/rosnodejs/charging_status\"" + "}";
@@ -371,29 +379,136 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             move_base_status = new Gson().fromJson(event.msg, Move_base_status.class);
         }
 
-        if(event.name.equals("/waypoints")){
+        // 获取所有站点并存入到HashMap集合中去
+        if (event.name.equals("/waypoints")) {
+            /****第一种方式***/
+//            // 将返回的数据生成实体类
+//            WayPointUtil wayPointUtil = new Gson().fromJson(event.msg, WayPointUtil.class);
+//            // mNavPublich 赋值
+//            List<String> mWayPointsNamesList = new ArrayList<String>();
+//            HashMap<String, Move_Base_Goal> mNavPublishHashMap = new HashMap<String, Move_Base_Goal>();
+//
+//            for (int i = 0; i < wayPointUtil.getWaypoints().size(); i++) {
+//
+//                String wayPointName = wayPointUtil.getWaypoints().get(i).getName();
+//                mWayPointsNamesList.add(wayPointName);
+//
+//                /******************************************** 拼接导航对象 ****************************************/
+//                Move_Base_Goal mbg = new Move_Base_Goal();
+//                Move_Base_Goal.MsgBean mbg_msg = new Move_Base_Goal.MsgBean();
+//
+//                Move_Base_Goal.MsgBean.TargetPoseBean mbg_msg_tpb = new Move_Base_Goal.MsgBean.TargetPoseBean();
+//                Move_Base_Goal.MsgBean.TargetPoseBean.HeaderBean mbg_msg_tpb_header = new Move_Base_Goal.MsgBean.TargetPoseBean.HeaderBean();
+//                Move_Base_Goal.MsgBean.TargetPoseBean.PoseBean mbg_msg_tpb_pose = new Move_Base_Goal.MsgBean.TargetPoseBean.PoseBean();
+//
+//                // 设置pose zxwy坐标数据
+//                mbg_msg_tpb_pose.setZ(wayPointUtil.getWaypoints().get(i).getPose().getOrientation().getZ());
+//                mbg_msg_tpb_pose.setX(wayPointUtil.getWaypoints().get(i).getPose().getOrientation().getX());
+//                mbg_msg_tpb_pose.setW(wayPointUtil.getWaypoints().get(i).getPose().getOrientation().getW());
+//                mbg_msg_tpb_pose.setY(wayPointUtil.getWaypoints().get(i).getPose().getOrientation().getY());
+//                // 设置Header与pose
+//                mbg_msg_tpb.setHeader(mbg_msg_tpb_header);
+//                mbg_msg_tpb.setPose(mbg_msg_tpb_pose);
+//                // 设置TargetPose
+//                mbg_msg.setTarget_pose(mbg_msg_tpb);
+//
+//                Move_Base_Goal.MsgBean.BasePositionBean mbg_msg_positionb = new Move_Base_Goal.MsgBean.BasePositionBean();
+//                Move_Base_Goal.MsgBean.BasePositionBean.HeaderBeanX mbg_msg_positionb_headerx = new Move_Base_Goal.MsgBean.BasePositionBean.HeaderBeanX();
+//                Move_Base_Goal.MsgBean.BasePositionBean.PoseBeanX mbg_msg_positionb_posex = new Move_Base_Goal.MsgBean.BasePositionBean.PoseBeanX();
+//
+//                // 设置pose zxy
+//                mbg_msg_positionb_posex.setZ(wayPointUtil.getWaypoints().get(i).getPose().getPosition().getZ());
+//                mbg_msg_positionb_posex.setX(wayPointUtil.getWaypoints().get(i).getPose().getPosition().getX());
+//                mbg_msg_positionb_posex.setY(wayPointUtil.getWaypoints().get(i).getPose().getPosition().getY());
+//                // 设置header与pose
+//                mbg_msg_positionb.setHeader(mbg_msg_positionb_headerx);
+//                mbg_msg_positionb.setPose(mbg_msg_positionb_posex);
+//                // 设置TargetPosition
+//                mbg_msg.setBase_position(mbg_msg_positionb);
+//
+//                // 数据汇总
+//                mbg.setMsg(mbg_msg);
+//                /******************************************** 抛出 mbg ****************************************/
+//
+//                mNavPublishHashMap.put(wayPointName, mbg);
+//            }
+//            // 清除数据缓存
+//            mNavPublich.clear();
+//            // 复制数据至新的集合
+//            mNavPublich.setWayPointsNames(mWayPointsNamesList);
+//            mNavPublich.setNavPublishHashMap(mNavPublishHashMap);
+//            Toast.makeText(this, " 数据同步成功 ", Toast.LENGTH_SHORT).show();
+
+
+            /****第二种方式***/
+
             // 将返回的数据生成实体类
             WayPointUtil wayPointUtil = new Gson().fromJson(event.msg, WayPointUtil.class);
             // mNavPublich 赋值
             List<String> mWayPointsNamesList = new ArrayList<String>();
-            HashMap<String, Move_base_status> mNavPublishHashMap = new HashMap<String, Move_base_status>();
+            HashMap<String, TMove_Base_Goal> mNavPublishHashMap = new HashMap<String, TMove_Base_Goal>();
 
-            for(int i = 0; i < wayPointUtil.getWaypoints().size(); i++){
+            for (int i = 0; i < wayPointUtil.getWaypoints().size(); i++) {
 
                 String wayPointName = wayPointUtil.getWaypoints().get(i).getName();
                 mWayPointsNamesList.add(wayPointName);
 
-                Move_Base_Goal mbg = new Move_Base_Goal();
+                /******************************************** 拼接导航对象 ****************************************/
+                TMove_Base_Goal mbg = new TMove_Base_Goal();
 
+                // 设置msg
+                TMove_Base_Goal.MsgBean mgb_msg = new TMove_Base_Goal.MsgBean();
+                TMove_Base_Goal.MsgBean.HeaderBean mbg_msg_header = new TMove_Base_Goal.MsgBean.HeaderBean();
+                TMove_Base_Goal.MsgBean.HeaderBean.StampBean mbg_msg_header_stamp = new TMove_Base_Goal.MsgBean.HeaderBean.StampBean();
+                mbg_msg_header.setStamp(mbg_msg_header_stamp);
+                mgb_msg.setHeader(mbg_msg_header);
 
+                // 设置 goal
+                TMove_Base_Goal.MsgBean.GoalIdBean mbg_msg_gid = new TMove_Base_Goal.MsgBean.GoalIdBean();
+                TMove_Base_Goal.MsgBean.GoalIdBean.StampBeanX mbg_msg_gid_stamp = new TMove_Base_Goal.MsgBean.GoalIdBean.StampBeanX();
+                mbg_msg_gid.setStamp(mbg_msg_gid_stamp);
+                mgb_msg.setGoal_id(mbg_msg_gid);
 
+                // 设置 goal
+                TMove_Base_Goal.MsgBean.GoalBean mbg_msg_goal = new TMove_Base_Goal.MsgBean.GoalBean();
+                // 设置 goal ------> target_pose -------->header
+                TMove_Base_Goal.MsgBean.GoalBean.TargetPoseBean mbg_msg_goal_targetpose = new  TMove_Base_Goal.MsgBean.GoalBean.TargetPoseBean();
+                TMove_Base_Goal.MsgBean.GoalBean.TargetPoseBean.HeaderBeanX mbg_msg_goal_targetpose_hearder = new TMove_Base_Goal.MsgBean.GoalBean.TargetPoseBean.HeaderBeanX();
+                TMove_Base_Goal.MsgBean.GoalBean.TargetPoseBean.HeaderBeanX.StampBeanXX mbg_msg_goal_targetpose_hearder_stamp = new TMove_Base_Goal.MsgBean.GoalBean.TargetPoseBean.HeaderBeanX.StampBeanXX();
+                mbg_msg_goal_targetpose_hearder.setStamp(mbg_msg_goal_targetpose_hearder_stamp);
+                mbg_msg_goal_targetpose.setHeader(mbg_msg_goal_targetpose_hearder);
+                // 设置 goal ------> target_pose -------->pose
+                TMove_Base_Goal.MsgBean.GoalBean.TargetPoseBean.PoseBean mbg_msg_goal_targetpose_pose = new TMove_Base_Goal.MsgBean.GoalBean.TargetPoseBean.PoseBean();
+                TMove_Base_Goal.MsgBean.GoalBean.TargetPoseBean.PoseBean.PositionBean mbg_msg_goal_targetpose_pose_position = new TMove_Base_Goal.MsgBean.GoalBean.TargetPoseBean.PoseBean.PositionBean();
+                mbg_msg_goal_targetpose_pose_position.setZ(wayPointUtil.getWaypoints().get(i).getPose().getPosition().getZ());
+                mbg_msg_goal_targetpose_pose_position.setX(wayPointUtil.getWaypoints().get(i).getPose().getPosition().getX());
+                mbg_msg_goal_targetpose_pose_position.setY(wayPointUtil.getWaypoints().get(i).getPose().getPosition().getY());
+                mbg_msg_goal_targetpose_pose.setPosition(mbg_msg_goal_targetpose_pose_position);
 
+                TMove_Base_Goal.MsgBean.GoalBean.TargetPoseBean.PoseBean.OrientationBean mbg_msg_goal_targetpose_pose_orient = new TMove_Base_Goal.MsgBean.GoalBean.TargetPoseBean.PoseBean.OrientationBean();
+                mbg_msg_goal_targetpose_pose_orient.setZ(wayPointUtil.getWaypoints().get(i).getPose().getOrientation().getZ());
+                mbg_msg_goal_targetpose_pose_orient.setX(wayPointUtil.getWaypoints().get(i).getPose().getOrientation().getX());
+                mbg_msg_goal_targetpose_pose_orient.setW(wayPointUtil.getWaypoints().get(i).getPose().getOrientation().getW());
+                mbg_msg_goal_targetpose_pose_orient.setY(wayPointUtil.getWaypoints().get(i).getPose().getOrientation().getY());
+                mbg_msg_goal_targetpose_pose.setOrientation(mbg_msg_goal_targetpose_pose_orient);
+
+                mbg_msg_goal_targetpose.setPose(mbg_msg_goal_targetpose_pose);
+
+                mbg_msg_goal.setTarget_pose(mbg_msg_goal_targetpose);
+
+                mgb_msg.setGoal(mbg_msg_goal);
+                // 数据汇总
+                mbg.setMsg(mgb_msg);
+                /******************************************** 抛出 mbg ****************************************/
+                mNavPublishHashMap.put(wayPointName, mbg);
             }
-
-
+            // 清除数据缓存
+            mNavPublich.clear();
+            // 复制数据至新的集合
+            mNavPublich.setWayPointsNames(mWayPointsNamesList);
+            mNavPublich.setNavPublishHashMap(mNavPublishHashMap);
+            Toast.makeText(this, " 数据同步成功 ", Toast.LENGTH_SHORT).show();
         }
-
-
     }
 
     Handler mHandler = new Handler() {
