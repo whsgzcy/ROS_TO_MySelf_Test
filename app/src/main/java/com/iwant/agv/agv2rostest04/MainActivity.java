@@ -285,7 +285,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 client.send(msg);
                 break;
             case R.id.nav_state:
-                client.send(NavHelper.getNavStatus());
+                client.send("{" + "\"op\": \"subscribe\"," + "\"topic\": \"/move_base/status\"," + "\"throttle_rate\": 1000" + "}");
                 break;
             // 同步站点数据
             case R.id.ansy_data:
@@ -370,13 +370,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // 事实的数据 为单点导航使用
         if (event.name.equals("/move_base/status")) {
-            Gson gson = new Gson();
-            move_base_status = gson.fromJson(event.msg, Move_base_status.class);
-        }
-
-        // 事实的数据 为单点导航使用
-        if (event.name.equals("/move_base/status")) {
-            move_base_status = new Gson().fromJson(event.msg, Move_base_status.class);
+            mStateTextView.setText(event.msg);
         }
 
         // 获取所有站点并存入到HashMap集合中去
@@ -467,6 +461,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 TMove_Base_Goal.MsgBean.GoalIdBean mbg_msg_gid = new TMove_Base_Goal.MsgBean.GoalIdBean();
                 TMove_Base_Goal.MsgBean.GoalIdBean.StampBeanX mbg_msg_gid_stamp = new TMove_Base_Goal.MsgBean.GoalIdBean.StampBeanX();
                 mbg_msg_gid.setStamp(mbg_msg_gid_stamp);
+                mbg_msg_gid.setId(wayPointName);
                 mgb_msg.setGoal_id(mbg_msg_gid);
 
                 // 设置 goal

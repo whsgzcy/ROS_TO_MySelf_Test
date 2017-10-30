@@ -118,7 +118,8 @@ public class TMove_Base_Goal {
              */
 
             private StampBeanX stamp;
-            private String id = "";
+
+            private String id;
 
             public StampBeanX getStamp() {
                 return stamp;
@@ -126,6 +127,10 @@ public class TMove_Base_Goal {
 
             public void setStamp(StampBeanX stamp) {
                 this.stamp = stamp;
+            }
+
+            public void setId(String id) {
+                this.id = id;
             }
 
             public String getId() {
