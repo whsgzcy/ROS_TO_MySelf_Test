@@ -20,6 +20,7 @@ import com.jilk.ros.ROSClient;
 import com.jilk.ros.rosbridge.ROSBridgeClient;
 import com.map.WayPointUtil;
 import com.nav.Move_Base_Goal;
+import com.nav.Move_Base_Status;
 import com.nav.NavPublich;
 import com.nav.TMove_Base_Goal;
 
@@ -33,6 +34,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -255,32 +257,54 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.test_navi_a:
 //                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_A_601\"}}");
+                client.send("{" + "\"op\": \"publish\"," + "\"topic\": \"/cmd_string\"," + "\"msg\": \"cancel\"" + "}");
                 String t = new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_6_A_601"));
+                mNavPointName = "map_6_A_601";
+                mNavPointState = 1;
+                Log.d("zheng", "正在导航去 " + mNavPointName + " 点");
                 client.send(t);
                 break;
             case R.id.test_navi_b:
 //                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_A_602\"}}");
+                client.send("{" + "\"op\": \"publish\"," + "\"topic\": \"/cmd_string\"," + "\"msg\": \"cancel\"" + "}");
+                mNavPointName = "map_6_A_602";
+                mNavPointState = 1;
+                Log.d("zheng", "正在导航去 " + mNavPointName + " 点");
                 client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_6_A_602")));
                 break;
             case R.id.test_navi_c:
 //                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_A_603\"}}");
+                client.send("{" + "\"op\": \"publish\"," + "\"topic\": \"/cmd_string\"," + "\"msg\": \"cancel\"" + "}");
+                mNavPointName = "map_6_A_603";
+                mNavPointState = 1;
+                Log.d("zheng", "正在导航去 " + mNavPointName + " 点");
                 client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_6_A_603")));
                 break;
             case R.id.test_navi_d:
 //                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_B_604\"}}");
+                client.send("{" + "\"op\": \"publish\"," + "\"topic\": \"/cmd_string\"," + "\"msg\": \"cancel\"" + "}");
+                mNavPointName = "map_6_B_604";
+                mNavPointState = 1;
+                Log.d("zheng", "正在导航去 " + mNavPointName + " 点");
                 client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_6_B_604")));
                 break;
             case R.id.test_navi_e:
 //                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_B_605\"}}");
+                client.send("{" + "\"op\": \"publish\"," + "\"topic\": \"/cmd_string\"," + "\"msg\": \"cancel\"" + "}");
+                mNavPointName = "map_6_B_605";
+                mNavPointState = 1;
+                Log.d("zheng", "正在导航去 " + mNavPointName + " 点");
                 client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_6_B_605")));
                 break;
             case R.id.test_navi_f:
 //                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"pose_6_A_O\"}}");
+                client.send("{" + "\"op\": \"publish\"," + "\"topic\": \"/cmd_string\"," + "\"msg\": \"cancel\"" + "}");
+                mNavPointName = "pose_6_A_O";
+                mNavPointState = 1;
+                Log.d("zheng", "正在导航去 " + mNavPointName + " 点");
                 client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("pose_6_A_O")));
                 break;
             case R.id.power:
-//                String msg = "{" + "  \"op\": \"subscribe\"," + "\"topic\": \"/rosnodejs/charging_status\"" + "}";
-//                String msg = "{" + "  \"op\": \"subscribe\"," + "\"topic\": \"/rosnodejs/robot_status\"" + "}";
                 String msg = "{" + "\"op\": \"subscribe\"," + "\"topic\": \"/rosnodejs/robot_status\"," + "\"throttle_rate\": 3000" + "}";
                 client.send(msg);
                 break;
@@ -329,7 +353,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onConnect() {
                 client.setDebug(true);
                 ((RCApplication) getApplication()).setRosClient(client);
-                Log.d(TAG, "Connect ROS success");
+                Log.d("chuan", "Connect ROS success");
                 message.what = 1;
                 mHandler.sendMessage(message);
                 runOnUiThread(new Runnable() {
@@ -342,7 +366,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onDisconnect(boolean normal, String reason, int code) {
-                Log.d(TAG, "ROS disconnect");
+                Log.d("chuan", "ROS disconnect");
                 message.what = 2;
                 mHandler.sendMessage(message);
             }
@@ -352,12 +376,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ex.printStackTrace();
                 message.what = 2;
                 mHandler.sendMessage(message);
-                Log.d(TAG, "ROS communication error");
+                Log.d("chuan", "ROS communication error");
             }
         });
     }
 
     //Receive data from ROS server, send from ROSBridgeWebSocketClient onMessage()
+    String mNavPointName;
+    // 记录导航命令的下达 1是 0否
+    int mNavPointState = 0;
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMain(final PublishEvent event) {
         if ("/map".equals(event.name)) {
@@ -371,6 +399,52 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 事实的数据 为单点导航使用
         if (event.name.equals("/move_base/status")) {
             mStateTextView.setText(event.msg);
+            Move_Base_Status mbs = new Gson().fromJson(event.msg, Move_Base_Status.class);
+            /***** 随机导航，导航到了再进行下一个导航 *****/
+            // 1、刚启动时状态list长度为0
+            if (mbs.getStatus_list().size() == 0) {
+                if (mNavPointState == 1) return;
+                int number = new Random().nextInt(5);
+                mNavPointName = mNavPublich.getWayPointsNames().get(number);
+                Log.d("zheng", "正在导航去 " + mNavPointName + " 点,,");
+                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get(mNavPointName)));
+                mNavPointState = 1;
+                return;
+            }
+            // 2、遍历 1正在导航 3已完成 2被取消
+            // 如果都不为1，则随机导航
+            for (int i = 0; i < mbs.getStatus_list().size(); i++) {
+
+                if (mbs.getStatus_list().get(i).getStatus() == 1) {
+                    Toast.makeText(this, "当前有正在执行的任务", Toast.LENGTH_SHORT).show();
+                    Log.d("zheng", "当前有正在执行的任务");
+                    mNavPointState = 0;
+                    return;
+                }
+
+                if(mbs.getStatus_list().get(i).getStatus() == 3 || mbs.getStatus_list().get(i).getStatus() == 2){
+                    // 若其中
+                    if(mbs.getStatus_list().get(i).getGoal_id().getId().equals(mNavPointName)){
+                        mNavPointState = 0;
+                        break;
+                    }
+                }
+
+                if (mNavPointState == 1) {
+                    Toast.makeText(this, "导航命令已下达", Toast.LENGTH_SHORT).show();
+                    Log.d("zheng", "导航命令已下达");
+                    return;
+                }
+            }
+
+            // 都不为1，则当前没有导航
+            int number = new Random().nextInt(5);
+            String navPointName = mNavPublich.getWayPointsNames().get(number);
+            if(mNavPointName.equals(navPointName))return;
+            mNavPointName = navPointName;
+            Log.d("zheng", "正在导航去 " + mNavPointName + " 点,");
+            client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get(mNavPointName)));
+            mNavPointState = 1;
         }
 
         // 获取所有站点并存入到HashMap集合中去
@@ -467,7 +541,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // 设置 goal
                 TMove_Base_Goal.MsgBean.GoalBean mbg_msg_goal = new TMove_Base_Goal.MsgBean.GoalBean();
                 // 设置 goal ------> target_pose -------->header
-                TMove_Base_Goal.MsgBean.GoalBean.TargetPoseBean mbg_msg_goal_targetpose = new  TMove_Base_Goal.MsgBean.GoalBean.TargetPoseBean();
+                TMove_Base_Goal.MsgBean.GoalBean.TargetPoseBean mbg_msg_goal_targetpose = new TMove_Base_Goal.MsgBean.GoalBean.TargetPoseBean();
                 TMove_Base_Goal.MsgBean.GoalBean.TargetPoseBean.HeaderBeanX mbg_msg_goal_targetpose_hearder = new TMove_Base_Goal.MsgBean.GoalBean.TargetPoseBean.HeaderBeanX();
                 TMove_Base_Goal.MsgBean.GoalBean.TargetPoseBean.HeaderBeanX.StampBeanXX mbg_msg_goal_targetpose_hearder_stamp = new TMove_Base_Goal.MsgBean.GoalBean.TargetPoseBean.HeaderBeanX.StampBeanXX();
                 mbg_msg_goal_targetpose_hearder.setStamp(mbg_msg_goal_targetpose_hearder_stamp);
@@ -500,6 +574,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // 清除数据缓存
             mNavPublich.clear();
             // 复制数据至新的集合
+            mWayPointsNamesList.remove("pose_6_A_O");
             mNavPublich.setWayPointsNames(mWayPointsNamesList);
             mNavPublich.setNavPublishHashMap(mNavPublishHashMap);
             Toast.makeText(this, " 数据同步成功 ", Toast.LENGTH_SHORT).show();
@@ -575,6 +650,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     };
-
-
 }
