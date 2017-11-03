@@ -166,11 +166,18 @@
                 android:layout_below="@+id/power"
                 android:text="获取导航状态" />
 
+            <Button
+                android:id="@+id/stop_nav_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/nav_state"
+                android:text="暂停导航状态" />
+
             <TextView
                 android:id="@+id/nav_state_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/nav_state"
+                android:layout_below="@+id/stop_nav_state"
                 />
 
             <Button

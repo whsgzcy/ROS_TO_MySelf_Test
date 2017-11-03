@@ -32,6 +32,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -225,7 +226,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //            }
 //        });
 
-
         Button mABtn = (Button) findViewById(R.id.test_navi_a);
         Button mBBtn = (Button) findViewById(R.id.test_navi_b);
         Button mCBtn = (Button) findViewById(R.id.test_navi_c);
@@ -243,6 +243,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mState = (Button) findViewById(R.id.nav_state);
         mState.setOnClickListener(this);
         mStateTextView = (TextView) findViewById(R.id.nav_state_text);
+
+        // 暂停接收导航状态
+        Button stop_nav_state_btn = (Button)findViewById(R.id.stop_nav_state);
+        stop_nav_state_btn.setOnClickListener(this);
     }
 
     @Override
@@ -310,6 +314,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.nav_state:
                 client.send("{" + "\"op\": \"subscribe\"," + "\"topic\": \"/move_base/status\"," + "\"throttle_rate\": 1000" + "}");
+//                client.send("{" + "\"op\": \"subscribe\"," + "\"topic\": \"/move_base/status\"" +  "}");
+                break;
+            case R.id.stop_nav_state:
+
+                Log.d("click", NavHelper.getTime());
+
+                client.send("{" + "\"op\": \"unsubscribe\"," + "\"topic\": \"/move_base/status\"" + "}");
+
+                Log.d("click", NavHelper.getTime());
+
                 break;
             // 同步站点数据
             case R.id.ansy_data:
@@ -398,115 +412,60 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // 事实的数据 为单点导航使用
         if (event.name.equals("/move_base/status")) {
-            mStateTextView.setText(event.msg);
-            Move_Base_Status mbs = new Gson().fromJson(event.msg, Move_Base_Status.class);
-            /***** 随机导航，导航到了再进行下一个导航 *****/
-            // 1、刚启动时状态list长度为0
-            if (mbs.getStatus_list().size() == 0) {
-                if (mNavPointState == 1) return;
-                int number = new Random().nextInt(5);
-                mNavPointName = mNavPublich.getWayPointsNames().get(number);
-                Log.d("zheng", "正在导航去 " + mNavPointName + " 点,,");
-                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get(mNavPointName)));
-                mNavPointState = 1;
-                return;
-            }
-            // 2、遍历 1正在导航 3已完成 2被取消
-            // 如果都不为1，则随机导航
-            for (int i = 0; i < mbs.getStatus_list().size(); i++) {
+            Log.d("move", "MainAcitvity response = " + event.msg);
 
-                if (mbs.getStatus_list().get(i).getStatus() == 1) {
-                    Toast.makeText(this, "当前有正在执行的任务", Toast.LENGTH_SHORT).show();
-                    Log.d("zheng", "当前有正在执行的任务");
-                    mNavPointState = 0;
-                    return;
-                }
-
-                if(mbs.getStatus_list().get(i).getStatus() == 3 || mbs.getStatus_list().get(i).getStatus() == 2){
-                    // 若其中
-                    if(mbs.getStatus_list().get(i).getGoal_id().getId().equals(mNavPointName)){
-                        mNavPointState = 0;
-                        break;
-                    }
-                }
-
-                if (mNavPointState == 1) {
-                    Toast.makeText(this, "导航命令已下达", Toast.LENGTH_SHORT).show();
-                    Log.d("zheng", "导航命令已下达");
-                    return;
-                }
-            }
-
-            // 都不为1，则当前没有导航
-            int number = new Random().nextInt(5);
-            String navPointName = mNavPublich.getWayPointsNames().get(number);
-            if(mNavPointName.equals(navPointName))return;
-            mNavPointName = navPointName;
-            Log.d("zheng", "正在导航去 " + mNavPointName + " 点,");
-            client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get(mNavPointName)));
-            mNavPointState = 1;
+//            mStateTextView.setText(event.msg);
+//            Move_Base_Status mbs = new Gson().fromJson(event.msg, Move_Base_Status.class);
+//            /***** 随机导航，导航到了再进行下一个导航 *****/
+//            // 1、刚启动时状态list长度为0
+//            if (mbs.getStatus_list().size() == 0) {
+//                if (mNavPointState == 1) return;
+//                int number = new Random().nextInt(5);
+//                mNavPointName = mNavPublich.getWayPointsNames().get(number);
+//                Log.d("zheng", "正在导航去 " + mNavPointName + " 点,,");
+//                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get(mNavPointName)));
+//                mNavPointState = 1;
+//                return;
+//            }
+//            // 2、遍历 1正在导航 3已完成 2被取消
+//            // 如果都不为1，则随机导航
+//            for (int i = 0; i < mbs.getStatus_list().size(); i++) {
+//
+//                if (mbs.getStatus_list().get(i).getStatus() == 1) {
+//                    Toast.makeText(this, "当前有正在执行的任务", Toast.LENGTH_SHORT).show();
+//                    Log.d("zheng", "当前有正在执行的任务");
+//                    mNavPointState = 0;
+//                    return;
+//                }
+//
+//                if(mbs.getStatus_list().get(i).getStatus() == 3 || mbs.getStatus_list().get(i).getStatus() == 2){
+//                    // 若其中
+//                    if(mbs.getStatus_list().get(i).getGoal_id().getId().equals(mNavPointName)){
+//                        mNavPointState = 0;
+//                        break;
+//                    }
+//                }
+//
+//                if (mNavPointState == 1) {
+//                    Toast.makeText(this, "导航命令已下达", Toast.LENGTH_SHORT).show();
+//                    Log.d("zheng", "导航命令已下达");
+//                    return;
+//                }
+//            }
+//
+//            // 都不为1，则当前没有导航
+//            int number = new Random().nextInt(5);
+//            String navPointName = mNavPublich.getWayPointsNames().get(number);
+//            if(mNavPointName.equals(navPointName))return;
+//            mNavPointName = navPointName;
+//            Log.d("zheng", "正在导航去 " + mNavPointName + " 点,");
+//            client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get(mNavPointName)));
+//            mNavPointState = 1;
         }
 
         // 获取所有站点并存入到HashMap集合中去
         if (event.name.equals("/waypoints")) {
             /****第一种方式***/
-//            // 将返回的数据生成实体类
-//            WayPointUtil wayPointUtil = new Gson().fromJson(event.msg, WayPointUtil.class);
-//            // mNavPublich 赋值
-//            List<String> mWayPointsNamesList = new ArrayList<String>();
-//            HashMap<String, Move_Base_Goal> mNavPublishHashMap = new HashMap<String, Move_Base_Goal>();
-//
-//            for (int i = 0; i < wayPointUtil.getWaypoints().size(); i++) {
-//
-//                String wayPointName = wayPointUtil.getWaypoints().get(i).getName();
-//                mWayPointsNamesList.add(wayPointName);
-//
-//                /******************************************** 拼接导航对象 ****************************************/
-//                Move_Base_Goal mbg = new Move_Base_Goal();
-//                Move_Base_Goal.MsgBean mbg_msg = new Move_Base_Goal.MsgBean();
-//
-//                Move_Base_Goal.MsgBean.TargetPoseBean mbg_msg_tpb = new Move_Base_Goal.MsgBean.TargetPoseBean();
-//                Move_Base_Goal.MsgBean.TargetPoseBean.HeaderBean mbg_msg_tpb_header = new Move_Base_Goal.MsgBean.TargetPoseBean.HeaderBean();
-//                Move_Base_Goal.MsgBean.TargetPoseBean.PoseBean mbg_msg_tpb_pose = new Move_Base_Goal.MsgBean.TargetPoseBean.PoseBean();
-//
-//                // 设置pose zxwy坐标数据
-//                mbg_msg_tpb_pose.setZ(wayPointUtil.getWaypoints().get(i).getPose().getOrientation().getZ());
-//                mbg_msg_tpb_pose.setX(wayPointUtil.getWaypoints().get(i).getPose().getOrientation().getX());
-//                mbg_msg_tpb_pose.setW(wayPointUtil.getWaypoints().get(i).getPose().getOrientation().getW());
-//                mbg_msg_tpb_pose.setY(wayPointUtil.getWaypoints().get(i).getPose().getOrientation().getY());
-//                // 设置Header与pose
-//                mbg_msg_tpb.setHeader(mbg_msg_tpb_header);
-//                mbg_msg_tpb.setPose(mbg_msg_tpb_pose);
-//                // 设置TargetPose
-//                mbg_msg.setTarget_pose(mbg_msg_tpb);
-//
-//                Move_Base_Goal.MsgBean.BasePositionBean mbg_msg_positionb = new Move_Base_Goal.MsgBean.BasePositionBean();
-//                Move_Base_Goal.MsgBean.BasePositionBean.HeaderBeanX mbg_msg_positionb_headerx = new Move_Base_Goal.MsgBean.BasePositionBean.HeaderBeanX();
-//                Move_Base_Goal.MsgBean.BasePositionBean.PoseBeanX mbg_msg_positionb_posex = new Move_Base_Goal.MsgBean.BasePositionBean.PoseBeanX();
-//
-//                // 设置pose zxy
-//                mbg_msg_positionb_posex.setZ(wayPointUtil.getWaypoints().get(i).getPose().getPosition().getZ());
-//                mbg_msg_positionb_posex.setX(wayPointUtil.getWaypoints().get(i).getPose().getPosition().getX());
-//                mbg_msg_positionb_posex.setY(wayPointUtil.getWaypoints().get(i).getPose().getPosition().getY());
-//                // 设置header与pose
-//                mbg_msg_positionb.setHeader(mbg_msg_positionb_headerx);
-//                mbg_msg_positionb.setPose(mbg_msg_positionb_posex);
-//                // 设置TargetPosition
-//                mbg_msg.setBase_position(mbg_msg_positionb);
-//
-//                // 数据汇总
-//                mbg.setMsg(mbg_msg);
-//                /******************************************** 抛出 mbg ****************************************/
-//
-//                mNavPublishHashMap.put(wayPointName, mbg);
-//            }
-//            // 清除数据缓存
-//            mNavPublich.clear();
-//            // 复制数据至新的集合
-//            mNavPublich.setWayPointsNames(mWayPointsNamesList);
-//            mNavPublich.setNavPublishHashMap(mNavPublishHashMap);
-//            Toast.makeText(this, " 数据同步成功 ", Toast.LENGTH_SHORT).show();
-
 
             /****第二种方式***/
 
