@@ -14,13 +14,10 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.helper.NavHelper;
-import com.helper.Nav_Ctrl_StautsResult;
 import com.iwant.agv.agv2rostest04.model.Move_base_status;
 import com.jilk.ros.ROSClient;
 import com.jilk.ros.rosbridge.ROSBridgeClient;
 import com.map.WayPointUtil;
-import com.nav.Move_Base_Goal;
-import com.nav.Move_Base_Status;
 import com.nav.NavPublich;
 import com.nav.TMove_Base_Goal;
 
@@ -32,10 +29,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -245,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mStateTextView = (TextView) findViewById(R.id.nav_state_text);
 
         // 暂停接收导航状态
-        Button stop_nav_state_btn = (Button)findViewById(R.id.stop_nav_state);
+        Button stop_nav_state_btn = (Button) findViewById(R.id.stop_nav_state);
         stop_nav_state_btn.setOnClickListener(this);
     }
 
