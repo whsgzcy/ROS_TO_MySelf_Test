@@ -232,12 +232,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button mDBtn = (Button) findViewById(R.id.test_navi_d);
         Button mEBtn = (Button) findViewById(R.id.test_navi_e);
         Button mFBtn = (Button) findViewById(R.id.test_navi_f);
+        Button mFFBtn = (Button) findViewById(R.id.test_navi_ee);
+
         mABtn.setOnClickListener(this);
         mBBtn.setOnClickListener(this);
         mCBtn.setOnClickListener(this);
         mDBtn.setOnClickListener(this);
         mEBtn.setOnClickListener(this);
         mFBtn.setOnClickListener(this);
+
+        mFFBtn.setOnClickListener(this);
 
         // 导航状态
         mState = (Button) findViewById(R.id.nav_state);
@@ -298,7 +302,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mNavPointName = "map_6_B_605";
                 mNavPointState = 1;
                 Log.d("zheng", "正在导航去 " + mNavPointName + " 点");
-                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_6_A_605")));
+                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_6_B_605")));
+                break;
+            case R.id.test_navi_ee:
+//                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_B_605\"}}");
+                client.send("{" + "\"op\": \"publish\"," + "\"topic\": \"/cmd_string\"," + "\"msg\": \"cancel\"" + "}");
+                mNavPointName = "map_6_B_605_";
+                mNavPointState = 1;
+                Log.d("zheng", "正在导航去 " + mNavPointName + " 点");
+                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_6_B_605_")));
                 break;
             case R.id.test_navi_f:
                 client.send("{" + "\"op\": \"publish\"," + "\"topic\": \"/rosnodejs/charge_ctrl\"," + "\"msg\": {" + "\"data\": \"charge\"" + "}" + "}");

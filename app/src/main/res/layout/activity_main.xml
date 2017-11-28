@@ -139,10 +139,18 @@
                 android:text=" map_6_B_605 点" />
 
             <Button
-                android:id="@+id/test_navi_f"
+                android:id="@+id/test_navi_ee"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/test_navi_e"
+                android:text=" map_6_B_605_ 点" />
+
+
+            <Button
+                android:id="@+id/test_navi_f"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/test_navi_ee"
                 android:text="去充电" />
 
 
