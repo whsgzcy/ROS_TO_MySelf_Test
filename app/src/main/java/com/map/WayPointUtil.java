@@ -253,4 +253,794 @@ public class WayPointUtil {
             }
         }
     }
+
+    /**
+     * {
+     "waypoints": [
+     {
+     "goal_timeout": 0,
+     "name": "pose_charge",
+     "header": {
+     "seq": 0,
+     "frame_id": "initial_pose",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": 0,
+     "failure_mode": "LOOP",
+     "pose": {
+     "orientation": {
+     "z": 0.0000672817,
+     "x": 0.00212954,
+     "w": 0.999965,
+     "y": 0.00806749
+     },
+     "position": {
+     "z": -0.0000111391,
+     "x": 0.0140563,
+     "y": -0.00219822
+     }
+     }
+     },
+     {
+     "goal_timeout": 0,
+     "name": "map_dockBegin",
+     "header": {
+     "seq": 0,
+     "frame_id": "map",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": 0,
+     "failure_mode": "LOOP",
+     "pose": {
+     "orientation": {
+     "z": 0.0000672817,
+     "x": 0.00212954,
+     "w": 0.999965,
+     "y": 0.00806749
+     },
+     "position": {
+     "z": -0.0000111391,
+     "x": -0.335944,
+     "y": -0.00224531
+     }
+     }
+     },
+     {
+     "goal_timeout": 0,
+     "name": "pubsuber_charge_adjust",
+     "header": {
+     "seq": 0,
+     "frame_id": "pubsuber",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": 0,
+     "failure_mode": "charge_adjust_done",
+     "pose": {
+     "orientation": {
+     "z": 0,
+     "x": 0,
+     "w": 1,
+     "y": 0
+     },
+     "position": {
+     "z": 0,
+     "x": 0,
+     "y": 0
+     }
+     }
+     },
+     {
+     "goal_timeout": 0,
+     "name": "pubsuber_auto_charge",
+     "header": {
+     "seq": 0,
+     "frame_id": "pubsuber",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": 0,
+     "failure_mode": "3",
+     "pose": {
+     "orientation": {
+     "z": 0,
+     "x": 0,
+     "w": 1,
+     "y": 0
+     },
+     "position": {
+     "z": 0,
+     "x": 0,
+     "y": 0
+     }
+     }
+     },
+     {
+     "goal_timeout": 0,
+     "name": "vel_forward",
+     "header": {
+     "seq": 0,
+     "frame_id": "cmd_vel",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": 0.05000000074505806,
+     "failure_mode": "NONE",
+     "pose": {
+     "orientation": {
+     "z": 0,
+     "x": 0,
+     "w": 1,
+     "y": 0
+     },
+     "position": {
+     "z": 0,
+     "x": 0,
+     "y": 0
+     }
+     }
+     },
+     {
+     "goal_timeout": 0,
+     "name": "vel_stop",
+     "header": {
+     "seq": 0,
+     "frame_id": "cmd_vel",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": 0,
+     "failure_mode": "NONE",
+     "pose": {
+     "orientation": {
+     "z": 0,
+     "x": 0,
+     "w": 1,
+     "y": 0
+     },
+     "position": {
+     "z": 0,
+     "x": 0,
+     "y": 0
+     }
+     }
+     },
+     {
+     "goal_timeout": 0,
+     "name": "vel_backward",
+     "header": {
+     "seq": 0,
+     "frame_id": "cmd_vel",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": -0.05000000074505806,
+     "failure_mode": "NONE",
+     "pose": {
+     "orientation": {
+     "z": 0,
+     "x": 0,
+     "w": 1,
+     "y": 0
+     },
+     "position": {
+     "z": 0,
+     "x": 0,
+     "y": 0
+     }
+     }
+     },
+     {
+     "goal_timeout": 0,
+     "name": "pub_bumper_on",
+     "header": {
+     "seq": 0,
+     "frame_id": "publisher",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": 0,
+     "failure_mode": "NONE",
+     "pose": {
+     "orientation": {
+     "z": 0,
+     "x": 0,
+     "w": 1,
+     "y": 0
+     },
+     "position": {
+     "z": 0,
+     "x": 0,
+     "y": 0
+     }
+     }
+     },
+     {
+     "goal_timeout": 0,
+     "name": "pub_bumper_off",
+     "header": {
+     "seq": 0,
+     "frame_id": "publisher",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": 0,
+     "failure_mode": "NONE",
+     "pose": {
+     "orientation": {
+     "z": 0,
+     "x": 0,
+     "w": 1,
+     "y": 0
+     },
+     "position": {
+     "z": 0,
+     "x": 0,
+     "y": 0
+     }
+     }
+     },
+     {
+     "goal_timeout": 0,
+     "name": "pub_estop_on",
+     "header": {
+     "seq": 0,
+     "frame_id": "publisher",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": 0,
+     "failure_mode": "NONE",
+     "pose": {
+     "orientation": {
+     "z": 0,
+     "x": 0,
+     "w": 1,
+     "y": 0
+     },
+     "position": {
+     "z": 0,
+     "x": 0,
+     "y": 0
+     }
+     }
+     },
+     {
+     "goal_timeout": 0,
+     "name": "pub_estop_off",
+     "header": {
+     "seq": 0,
+     "frame_id": "publisher",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": 0,
+     "failure_mode": "NONE",
+     "pose": {
+     "orientation": {
+     "z": 0,
+     "x": 0,
+     "w": 1,
+     "y": 0
+     },
+     "position": {
+     "z": 0,
+     "x": 0,
+     "y": 0
+     }
+     }
+     },
+     {
+     "goal_timeout": 0,
+     "name": "pub_estop_auto",
+     "header": {
+     "seq": 0,
+     "frame_id": "publisher",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": 0,
+     "failure_mode": "NONE",
+     "pose": {
+     "orientation": {
+     "z": 0,
+     "x": 0,
+     "w": 1,
+     "y": 0
+     },
+     "position": {
+     "z": 0,
+     "x": 0,
+     "y": 0
+     }
+     }
+     },
+     {
+     "goal_timeout": 0,
+     "name": "pub_light_r",
+     "header": {
+     "seq": 0,
+     "frame_id": "publisher",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": 0,
+     "failure_mode": "NONE",
+     "pose": {
+     "orientation": {
+     "z": 0,
+     "x": 0,
+     "w": 1,
+     "y": 0
+     },
+     "position": {
+     "z": 0,
+     "x": 0,
+     "y": 0
+     }
+     }
+     },
+     {
+     "goal_timeout": 0,
+     "name": "pub_light_g",
+     "header": {
+     "seq": 0,
+     "frame_id": "publisher",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": 0,
+     "failure_mode": "NONE",
+     "pose": {
+     "orientation": {
+     "z": 0,
+     "x": 0,
+     "w": 1,
+     "y": 0
+     },
+     "position": {
+     "z": 0,
+     "x": 0,
+     "y": 0
+     }
+     }
+     },
+     {
+     "goal_timeout": 0,
+     "name": "pub_light_b",
+     "header": {
+     "seq": 0,
+     "frame_id": "publisher",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": 0,
+     "failure_mode": "NONE",
+     "pose": {
+     "orientation": {
+     "z": 0,
+     "x": 0,
+     "w": 1,
+     "y": 0
+     },
+     "position": {
+     "z": 0,
+     "x": 0,
+     "y": 0
+     }
+     }
+     },
+     {
+     "goal_timeout": 0,
+     "name": "pub_light_y",
+     "header": {
+     "seq": 0,
+     "frame_id": "publisher",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": 0,
+     "failure_mode": "NONE",
+     "pose": {
+     "orientation": {
+     "z": 0,
+     "x": 0,
+     "w": 1,
+     "y": 0
+     },
+     "position": {
+     "z": 0,
+     "x": 0,
+     "y": 0
+     }
+     }
+     },
+     {
+     "goal_timeout": 0,
+     "name": "sound_sound_on",
+     "header": {
+     "seq": 0,
+     "frame_id": "sound_play",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": 0,
+     "failure_mode": "START",
+     "pose": {
+     "orientation": {
+     "z": 0,
+     "x": 0,
+     "w": 1,
+     "y": 0
+     },
+     "position": {
+     "z": 0,
+     "x": 0,
+     "y": 0
+     }
+     }
+     },
+     {
+     "goal_timeout": 0,
+     "name": "sound_sound_off",
+     "header": {
+     "seq": 0,
+     "frame_id": "sound_play",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": 0,
+     "failure_mode": "STOP",
+     "pose": {
+     "orientation": {
+     "z": 0,
+     "x": 0,
+     "w": 1,
+     "y": 0
+     },
+     "position": {
+     "z": 0,
+     "x": 0,
+     "y": 0
+     }
+     }
+     },
+     {
+     "goal_timeout": 0,
+     "name": "sound_sound_play_once",
+     "header": {
+     "seq": 0,
+     "frame_id": "sound_play",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": 0,
+     "failure_mode": "ONCE",
+     "pose": {
+     "orientation": {
+     "z": 0,
+     "x": 0,
+     "w": 1,
+     "y": 0
+     },
+     "position": {
+     "z": 0,
+     "x": 0,
+     "y": 0
+     }
+     }
+     },
+     {
+     "goal_timeout": 0,
+     "name": "scanMarker_scan_9",
+     "header": {
+     "seq": 0,
+     "frame_id": "scan_marker",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": 0.8999999761581421,
+     "failure_mode": "LOOP",
+     "pose": {
+     "orientation": {
+     "z": 0,
+     "x": 0,
+     "w": 1,
+     "y": 0
+     },
+     "position": {
+     "z": 0,
+     "x": 0,
+     "y": 0
+     }
+     }
+     },
+     {
+     "goal_timeout": 0,
+     "name": "scanMarker_scan_8",
+     "header": {
+     "seq": 0,
+     "frame_id": "scan_marker",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": 0.800000011920929,
+     "failure_mode": "LOOP",
+     "pose": {
+     "orientation": {
+     "z": 0,
+     "x": 0,
+     "w": 1,
+     "y": 0
+     },
+     "position": {
+     "z": 0,
+     "x": 0,
+     "y": 0
+     }
+     }
+     },
+     {
+     "goal_timeout": 0,
+     "name": "scanMarker_scan_7",
+     "header": {
+     "seq": 0,
+     "frame_id": "scan_marker",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": 0.699999988079071,
+     "failure_mode": "LOOP",
+     "pose": {
+     "orientation": {
+     "z": 0,
+     "x": 0,
+     "w": 1,
+     "y": 0
+     },
+     "position": {
+     "z": 0,
+     "x": 0,
+     "y": 0
+     }
+     }
+     },
+     {
+     "goal_timeout": 0,
+     "name": "scanMarker_scan_6",
+     "header": {
+     "seq": 0,
+     "frame_id": "scan_marker",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": 0.6000000238418579,
+     "failure_mode": "LOOP",
+     "pose": {
+     "orientation": {
+     "z": 0,
+     "x": 0,
+     "w": 1,
+     "y": 0
+     },
+     "position": {
+     "z": 0,
+     "x": 0,
+     "y": 0
+     }
+     }
+     },
+     {
+     "goal_timeout": 0,
+     "name": "scanMarker_scan_5",
+     "header": {
+     "seq": 0,
+     "frame_id": "scan_marker",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": 0.5,
+     "failure_mode": "LOOP",
+     "pose": {
+     "orientation": {
+     "z": 0,
+     "x": 0,
+     "w": 1,
+     "y": 0
+     },
+     "position": {
+     "z": 0,
+     "x": 0,
+     "y": 0
+     }
+     }
+     },
+     {
+     "goal_timeout": 0,
+     "name": "scanMarker_scan_4",
+     "header": {
+     "seq": 0,
+     "frame_id": "scan_marker",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": 0.4000000059604645,
+     "failure_mode": "LOOP",
+     "pose": {
+     "orientation": {
+     "z": 0,
+     "x": 0,
+     "w": 1,
+     "y": 0
+     },
+     "position": {
+     "z": 0,
+     "x": 0,
+     "y": 0
+     }
+     }
+     },
+     {
+     "goal_timeout": 6,
+     "name": "timer_sail",
+     "header": {
+     "seq": 0,
+     "frame_id": "timer",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": 0,
+     "failure_mode": "NONE",
+     "pose": {
+     "orientation": {
+     "z": 0,
+     "x": 0,
+     "w": 1,
+     "y": 0
+     },
+     "position": {
+     "z": 0,
+     "x": 0,
+     "y": 0
+     }
+     }
+     },
+     {
+     "goal_timeout": 0,
+     "name": "map_6_A_601",
+     "header": {
+     "seq": 0,
+     "frame_id": "map",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": 0,
+     "failure_mode": "LOOP",
+     "pose": {
+     "orientation": {
+     "z": -0.710356,
+     "x": 0.00568841,
+     "w": 0.70382,
+     "y": 0.000206077
+     },
+     "position": {
+     "z": 0.0000268415,
+     "x": -5.43955,
+     "y": 0.441982
+     }
+     }
+     },
+     {
+     "goal_timeout": 0,
+     "name": "scanMarker_6_A_O",
+     "header": {
+     "seq": 0,
+     "frame_id": "scan_marker",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": 0,
+     "failure_mode": "LOOP",
+     "pose": {
+     "orientation": {
+     "z": -0.00584617,
+     "x": 0.00134079,
+     "w": 0.999976,
+     "y": -0.00348327
+     },
+     "position": {
+     "z": 0.0095544,
+     "x": -0.00660459,
+     "y": -0.0187305
+     }
+     }
+     },
+     {
+     "goal_timeout": 0,
+     "name": "map_6_A_602",
+     "header": {
+     "seq": 0,
+     "frame_id": "map",
+     "stamp": {
+     "secs": 0,
+     "nsecs": 0
+     }
+     },
+     "close_enough": 0,
+     "failure_mode": "LOOP",
+     "pose": {
+     "orientation": {
+     "z": 0.673475,
+     "x": 0.00818346,
+     "w": 0.739164,
+     "y": 0.00151504
+     },
+     "position": {
+     "z": 0.000584151,
+     "x": -2.65592,
+     "y": 0.365388
+     }
+     }
+     }
+     ]
+     }
+     */
 }

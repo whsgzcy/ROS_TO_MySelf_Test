@@ -145,6 +145,14 @@
                 android:layout_below="@+id/test_navi_e"
                 android:text="去充电" />
 
+
+            <Button
+                android:id="@+id/unpower"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/test_navi_f"
+                android:text="下充电桩" />
+
             <!--<Button-->
             <!--android:id="@+id/test_navi_d"-->
             <!--android:layout_width="match_parent"-->
@@ -156,7 +164,7 @@
                 android:id="@+id/power"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/test_navi_f"
+                android:layout_below="@+id/unpower"
                 android:text="获取电量 charging_status / robot_status 结点" />
 
             <Button
