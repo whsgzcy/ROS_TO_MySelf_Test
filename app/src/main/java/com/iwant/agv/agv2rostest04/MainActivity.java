@@ -253,6 +253,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         stop_nav_state_btn.setOnClickListener(this);
     }
 
+    String mPointName = null;
+
     @Override
     public void onClick(View v) {
 
@@ -271,6 +273,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mNavPointState = 1;
                 Log.d("zheng", "正在导航去 " + mNavPointName + " 点");
                 client.send(t);
+                mPointName = "map_6_A_601";
                 break;
             case R.id.test_navi_b:
 //                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_A_602\"}}");
@@ -279,6 +282,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mNavPointState = 1;
                 Log.d("zheng", "正在导航去 " + mNavPointName + " 点");
                 client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_6_A_602")));
+                mPointName = "map_6_A_602";
                 break;
             case R.id.test_navi_c:
 //                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_A_603\"}}");
@@ -287,6 +291,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mNavPointState = 1;
                 Log.d("zheng", "正在导航去 " + mNavPointName + " 点");
                 client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_6_A_603")));
+                mPointName = "map_6_A_603";
                 break;
             case R.id.test_navi_d:
 //                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_B_604\"}}");
@@ -295,6 +300,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mNavPointState = 1;
                 Log.d("zheng", "正在导航去 " + mNavPointName + " 点");
                 client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_6_B_604")));
+                mPointName = "map_6_B_604";
                 break;
             case R.id.test_navi_e:
 //                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_B_605\"}}");
@@ -303,14 +309,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mNavPointState = 1;
                 Log.d("zheng", "正在导航去 " + mNavPointName + " 点");
                 client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_6_B_605")));
+                mPointName = "map_6_B_605";
                 break;
             case R.id.test_navi_ee:
 //                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_B_605\"}}");
                 client.send("{" + "\"op\": \"publish\"," + "\"topic\": \"/cmd_string\"," + "\"msg\": \"cancel\"" + "}");
-                mNavPointName = "map_6_B_605_";
+                mNavPointName = "map_6_B_605_map";
                 mNavPointState = 1;
                 Log.d("zheng", "正在导航去 " + mNavPointName + " 点");
-                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_6_B_605_")));
+                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_6_B_605_map")));
+                mPointName = "map_6_B_605_map";
                 break;
             case R.id.test_navi_f:
                 client.send("{" + "\"op\": \"publish\"," + "\"topic\": \"/rosnodejs/charge_ctrl\"," + "\"msg\": {" + "\"data\": \"charge\"" + "}" + "}");
@@ -323,7 +331,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 client.send(msg);
                 break;
             case R.id.nav_state:
-                client.send("{" + "\"op\": \"subscribe\"," + "\"topic\": \"/move_base/status\"," + "\"throttle_rate\": 3000" + "}");
+                client.send("{" + "\"op\": \"subscribe\"," + "\"topic\": \"/move_base/status\"," + "\"throttle_rate\": 1888" + "}");
 //                client.send("{" + "\"op\": \"subscribe\"," + "\"topic\": \"/move_base/status\"" +  "}");
                 break;
             case R.id.stop_nav_state:
@@ -409,6 +417,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     String mNavPointName;
     // 记录导航命令的下达 1是 0否
     int mNavPointState = 0;
+    //
+    int FLAG = 0;
+    String mCurrentPointName = null;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMain(final PublishEvent event) {
@@ -422,10 +433,65 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // 事实的数据 为单点导航使用
         if (event.name.equals("/move_base/status")) {
-            Log.d("move", "MainAcitvity response = " + event.msg);
-
+            Log.d("moved", "MainAcitvity response = " + event.msg);
             mStateTextView.setText(event.msg);
             Move_Base_Status mbs = new Gson().fromJson(event.msg, Move_Base_Status.class);
+            if (mbs == null) return;
+            if (mbs.getStatus_list().size() == 0) return;
+            for (int i = 0; i < mbs.getStatus_list().size(); i++) {
+                String name = mbs.getStatus_list().get(i).getGoal_id().getId();
+                Log.d("move", "MainAcitvity response = " + event.msg);
+                Log.d("move", "MainAcitvity name = " + name);
+                if (name.contains("map_") || name.contains("_map")) {
+                    // 导航为1,正在运行
+                    if (mbs.getStatus_list().get(i).getStatus() == 1) {
+                        mPointName = name.replace("_map", "");
+                        mCurrentPointName = name;
+                        Log.d("move", "/n");
+                        Log.d("move", "MainAcitvity getStatus = " + 1);
+                        Log.d("move", "MainAcitvity mPointName = " + mPointName);
+                        Log.d("move", "MainAcitvity mCurrentPointName = " + mCurrentPointName);
+                    }
+                    // 导航为3,到达
+                    if (mbs.getStatus_list().get(i).getStatus() == 3) {
+                        if (mPointName != null) {
+                            if (name.equals(mPointName) || name.equals(mPointName + "_map")) {
+                                Log.d("move", "/n");
+                                Log.d("move", "MainAcitvity getStatus = " + 3);
+                                Log.d("move", "MainAcitvity mPointName = " + mPointName);
+                                Log.d("move", "MainAcitvity mCurrentPointName = " + mCurrentPointName);
+                                mPointName = null;
+                                mCurrentPointName = null;
+                                Log.d("move", "MainAcitvity getStatus = " + 3);
+                                Log.d("move", "MainAcitvity mPointName = " + mPointName);
+                                Log.d("move", "MainAcitvity mCurrentPointName = " + mCurrentPointName);
+                            }
+                        }
+                    }
+                    // 进入4 当前点被放弃
+                    if (mbs.getStatus_list().get(i).getStatus() == 4) {
+                        Log.d("move", "/n");
+                        Log.d("move", "MainAcitvity getStatus = " + 4);
+                        Log.d("move", "MainAcitvity mPointName = " + mPointName);
+                        Log.d("move", "MainAcitvity mCurrentPointName = " + mCurrentPointName);
+                        if (mPointName == null) return;
+                        if (mCurrentPointName == null) return;
+                        if (!mCurrentPointName.equals(name)) return;
+                        // 如果站点名称包含当前导航的名称
+                        if (name.equals(mPointName)) {
+                            client.send("{" + "\"op\": \"publish\"," + "\"topic\": \"/cmd_string\"," + "\"msg\": \"cancel\"" + "}");
+                            client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get(mPointName + "_map")));
+                            mCurrentPointName = mPointName + "_map";
+                        }
+
+                        if (name.contains("_map") && name.contains(mPointName)) {
+                            client.send("{" + "\"op\": \"publish\"," + "\"topic\": \"/cmd_string\"," + "\"msg\": \"cancel\"" + "}");
+                            client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get(mPointName)));
+                            mCurrentPointName = mPointName;
+                        }
+                    }
+                }
+            }
         }
 
         // 获取所有站点并存入到HashMap集合中去
