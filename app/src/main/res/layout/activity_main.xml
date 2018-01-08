@@ -91,14 +91,14 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="获取坐标数据" />
+                        android:text="进行充电操作" />
 
-                    <Button
-                        android:id="@+id/nav_poi_cancel"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="取消坐标数据" />
+                    <!--<Button-->
+                    <!--android:id="@+id/nav_poi_cancel"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:text="取消操作" />-->
 
                 </LinearLayout>
 

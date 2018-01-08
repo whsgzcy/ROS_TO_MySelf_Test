@@ -1,7 +1,10 @@
 package com.iwant.agv.agv2rostest04;
 
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,7 +21,6 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.helper.NavHelper;
-import com.iwant.agv.agv2rostest04.model.Move_base_status;
 import com.jilk.ros.ROSClient;
 import com.jilk.ros.rosbridge.ROSBridgeClient;
 import com.map.WayPointUtil;
@@ -75,12 +77,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 public void poi_y(double y) {
 
                 }
+
+                @Override
+                public void unCharge() {
+                    // 下发下充电桩操作
+                    client.send("{" + "\"op\": \"publish\"," + "\"topic\": \"/rosnodejs/charge_ctrl\"," + "\"msg\": {" + "\"data\": \"uncharge\"" + "}" + "}");
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Message message = new Message();
+                            message.what = 2;
+                            mHandler.sendMessage(message);
+                        }
+                    }, 8000);
+                }
+
+                @Override
+                public void cancel() {
+                    client.send("{\"op\":\"publish\",\"topic\":\"/cmd_string\",\"msg\":{\"data\":\"cancel\"}}");
+                    Log.d("yu", "main hava canceled");
+                }
             });
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
 
+        }
+    };
+
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 2:
+                    mNavPointName = "map_4_A_400";
+                    mNavPointState = 1;
+                    client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_400")));
+                    mPointName = "map_4_A_400";
+                    break;
+                // 连接成功 获取设备信息
+                case 1:
+                    break;
+            }
         }
     };
 
@@ -226,8 +266,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button poiBtn = (Button) findViewById(R.id.nav_poi);
         poiBtn.setOnClickListener(this);
 
-        Button poiCancelBtn = (Button) findViewById(R.id.nav_poi_cancel);
-        poiCancelBtn.setOnClickListener(this);
+//        Button poiCancelBtn = (Button) findViewById(R.id.nav_poi_cancel);
+//        poiCancelBtn.setOnClickListener(this);
+
+        // 注册广播
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.iwant.action");
+        registerReceiver(mBroadCastReceive, intentFilter);
     }
 
     String mPointName = null;
@@ -243,12 +288,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 connect(mWSURL);
                 break;
             case R.id.nav_poi:
-                Intent intent = new Intent(this, PostionMonitorService.class);
-                bindService(intent, conn, BIND_AUTO_CREATE);
+                mNavPointName = "map_4_A_400";
+                mNavPointState = 1;
+                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_400")));
+                mPointName = "map_4_A_400";
+                if (binder == null) {
+                    // 开始导航
+                    Intent intent = new Intent(this, PostionMonitorService.class);
+                    bindService(intent, conn, BIND_AUTO_CREATE);
+                }
                 break;
-            case R.id.nav_poi_cancel:
-                unbindService(conn);
-                break;
+//            case R.id.nav_poi_cancel:
+//                unbindService(conn);
+//                break;
             case R.id.nav_400_go:
                 mNavPointName = "map_4_A_400";
                 mNavPointState = 1;
@@ -312,6 +364,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mPointName = "map_4_A_404_map";
                 break;
             case R.id.test_navi_f:
+                if (binder != null) binder.startPoi();
                 client.send("{" + "\"op\": \"publish\"," + "\"topic\": \"/rosnodejs/charge_ctrl\"," + "\"msg\": {" + "\"data\": \"charge\"" + "}" + "}");
                 break;
             case R.id.unpower:
@@ -338,6 +391,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+
+    BroadcastReceiver mBroadCastReceive = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String state = intent.getStringExtra("action");
+            // 取消底盘
+            if (state.equals("cancel")) {
+                Log.d("yu", "i'm have receviced");
+                client.send("{\"op\":\"publish\",\"topic\":\"/cmd_string\",\"msg\":{\"data\":\"cancel\"}}");
+            }
+        }
+    };
 
     //    Add TouchListener on log TextView
     private void processMoveTopic(float linearX, float angularZ) {
@@ -555,19 +620,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, " 数据同步成功 ", Toast.LENGTH_SHORT).show();
         }
     }
-
-    Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case 2:
-
-                    break;
-                // 连接成功 获取设备信息
-                case 1:
-                    break;
-            }
-        }
-    };
 }
