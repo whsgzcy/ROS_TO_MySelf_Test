@@ -67,142 +67,187 @@
                 android:layout_centerHorizontal="true"
                 android:text="下" />
 
-            <TextView
-                android:id="@+id/state_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/down_btn"
-                android:text="设备信息" />
-
-            <TextView
-                android:id="@+id/state_info_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/state_text"
-                android:hint="loading..." />
-
-            <TextView
-                android:id="@+id/station_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/state_info_text"
-                android:text="站点信息" />
-
-            <TextView
-                android:id="@+id/station_info_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/station_text"
-                android:hint="loading..." />
-
             <Button
                 android:id="@+id/ansy_data"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/station_info_text"
+                android:layout_below="@+id/down_btn"
                 android:text="开始同步站点数据" />
 
-
-            <Button
-                android:id="@+id/test_navi_a"
+            <LinearLayout
+                android:id="@+id/l"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_below="@+id/ansy_data"
-                android:text="map_6_A_601 点" />
+                android:orientation="vertical">
 
-            <Button
-                android:id="@+id/test_navi_b"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/test_navi_a"
-                android:text="map_6_A_602 点" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/test_navi_c"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/test_navi_b"
-                android:text="map_6_A_603 点" />
+                    <Button
+                        android:id="@+id/nav_poi"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="获取坐标数据" />
 
-            <Button
-                android:id="@+id/test_navi_d"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/test_navi_c"
-                android:text="map_6_B_604 点" />
+                    <Button
+                        android:id="@+id/nav_poi_cancel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="取消坐标数据" />
 
-            <Button
-                android:id="@+id/test_navi_e"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/test_navi_d"
-                android:text=" map_6_B_605 点" />
+                </LinearLayout>
 
-            <Button
-                android:id="@+id/test_navi_ee"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/test_navi_e"
-                android:text=" map_6_B_605_ 点" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/nav_400_go"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="充电缓冲点" />
+
+                    <Button
+                        android:id="@+id/nav_400_go_go"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="充电缓冲点_备用" />
+
+                </LinearLayout>
 
 
-            <Button
-                android:id="@+id/test_navi_f"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/test_navi_ee"
-                android:text="去充电" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
+                    <Button
+                        android:id="@+id/nav_401_go"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="A" />
 
-            <Button
-                android:id="@+id/unpower"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/test_navi_f"
-                android:text="下充电桩" />
+                    <Button
+                        android:id="@+id/nav_401_go_go"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="A_备用" />
 
-            <!--<Button-->
-            <!--android:id="@+id/test_navi_d"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_below="@+id/test_navi_c"-->
-            <!--android:text="d点" />-->
+                </LinearLayout>
 
-            <Button
-                android:id="@+id/power"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/unpower"
-                android:text="获取电量 charging_status / robot_status 结点" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/nav_state"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/power"
-                android:text="获取导航状态" />
+                    <Button
+                        android:id="@+id/nav_402_go"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="B" />
 
-            <Button
-                android:id="@+id/stop_nav_state"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/nav_state"
-                android:text="暂停导航状态" />
+                    <Button
+                        android:id="@+id/nav_402_go_go"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="B_备用" />
 
-            <TextView
-                android:id="@+id/nav_state_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/stop_nav_state"
-                />
+                </LinearLayout>
 
-            <Button
-                android:id="@+id/ceshi"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/nav_state_text"
-                android:text="开始测试" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/nav_403_go"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="C" />
+
+                    <Button
+                        android:id="@+id/nav_403_go_go"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="C_备用" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/nav_404_go"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="D" />
+
+                    <Button
+                        android:id="@+id/nav_404_go_go"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="D_备用" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/test_navi_f"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="去充电" />
+
+                <Button
+                    android:id="@+id/unpower"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="下充电桩" />
+
+                <Button
+                    android:id="@+id/power"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="获取电量 charging_status / robot_status 结点" />
+
+                <Button
+                    android:id="@+id/nav_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="获取导航状态" />
+
+                <Button
+                    android:id="@+id/stop_nav_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="暂停导航状态" />
+
+                <TextView
+                    android:id="@+id/nav_state_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/ceshi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="CANCEL" />
+
+            </LinearLayout>
         </RelativeLayout>
     </ScrollView>
-
 </LinearLayout>

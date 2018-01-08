@@ -1,7 +1,11 @@
 package com.iwant.agv.agv2rostest04;
 
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -21,6 +25,7 @@ import com.map.WayPointUtil;
 import com.nav.Move_Base_Status;
 import com.nav.NavPublich;
 import com.nav.TMove_Base_Goal;
+import com.service.PostionMonitorService;
 
 import net.whsgzcy.rosclient.RCApplication;
 import net.whsgzcy.rosclient.entity.PublishEvent;
@@ -43,11 +48,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mTestBtn;
     private Button mPowerBtn;
     private Button mUnPowerBtn;
-    private TextView mStateText, mStationText;
 
     private ROSBridgeClient client;
-
-    private Move_base_status move_base_status;
 
     private String mWSURL;
 
@@ -56,6 +58,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // 导航publish
     private NavPublich mNavPublich = new NavPublich();
+
+    private PostionMonitorService.MyBinder binder;
+    ServiceConnection conn = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            binder = (PostionMonitorService.MyBinder) service;
+            binder.getPoi(client);
+            binder.setPoiListener(new PostionMonitorService.POI() {
+                @Override
+                public void poi_x(double x) {
+
+                }
+
+                @Override
+                public void poi_y(double y) {
+
+                }
+            });
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,9 +103,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mTestBtn = (Button) findViewById(R.id.ansy_data);
         mTestBtn.setOnClickListener(this);
 
-        mStateText = (TextView) findViewById(R.id.state_info_text);
-        mStationText = (TextView) findViewById(R.id.station_info_text);
-
         // 获取电量按钮
         mPowerBtn = (Button) findViewById(R.id.power);
         mPowerBtn.setOnClickListener(this);
@@ -87,14 +111,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mUnPowerBtn.setOnClickListener(this);
 
         mIPEdit.setText("ws://192.168.4.11:9090");
-//        mIPEdit.setText("ws://192.168.4.11:9090");
-        // 控制小车
-//        mLeftBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                processMoveTopic(0,1);
-//            }
-//        });
 
         mUpBtn.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -164,85 +180,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 processStopTopic();
             }
         });
-//        mNaviTestBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (client == null) return;
-//                // /move_base/goal
-//                String goal_id = move_base_status.getStatus_list().get(0).getGoal_id().getId();
-//                int goal_id_stamp_secs = move_base_status.getStatus_list().get(0).getGoal_id().getStamp().getSecs();
-//                int goal_id_stamp_nsecs = move_base_status.getStatus_list().get(0).getGoal_id().getStamp().getNsecs();
-//                int header_seq = move_base_status.getHeader().getSeq();
-//                int header_stamp_secs = move_base_status.getHeader().getStamp().getSecs();
-//                int header_stamp_nsecs = move_base_status.getHeader().getStamp().getNsecs();
-//                String msg = "{\n" +
-//                        "    \"op\": \"publish\",\n" +
-//                        "    \"topic\": \"/move_base/goal\",\n" +
-//                        "    \"msg\": {\n" +
-//                        "        \"header\": {\n" +
-//                        "            \"seq\": " + header_seq + ",\n" +
-//                        "            \"stamp\": {\n" +
-//                        "                \"secs\": " + header_stamp_secs + ",\n" +
-//                        "                \"nsecs\": " + header_stamp_nsecs + "\n" +
-//                        "            },\n" +
-//                        "            \"frame_id\": \"\"\n" +
-//                        "        },\n" +
-//                        "        \"goal_id\": {\n" +
-//                        "            \"stamp\": {\n" +
-//                        "                \"secs\": " + goal_id_stamp_secs + ",\n" +
-//                        "                \"nsecs\": " + goal_id_stamp_nsecs + "\n" +
-//                        "            },\n" +
-//                        "            \"id\": \"" + goal_id + "\n" +
-//                        "        },\n" +
-//                        "        \"goal\": {\n" +
-//                        "            \"target_pose\": {\n" +
-//                        "                \"header\": {\n" +
-//                        "                    \"seq\": 4,\n" +
-//                        "                    \"stamp\": {\n" +
-//                        "                        \"secs\": 1494482836,\n" +
-//                        "                        \"nsecs\": 594048023\n" +
-//                        "                    },\n" +
-//                        "                    \"frame_id\": \"map\"\n" +
-//                        "                },\n" +
-//                        "                \"pose\": {\n" +
-//                        "                    \"position\": {\n" +
-//                        "                        \"z\": 0,\n" +
-//                        "                        \"y\": 0.059577807928737736,\n" +
-//                        "                        \"x\": -0.23101512046212858\n" +
-//                        "                    },\n" +
-//                        "                    \"orientation\": {\n" +
-//                        "                        \"w\": 0.9994535234062796,\n" +
-//                        "                        \"z\": -0.030639017710174105,\n" +
-//                        "                        \"y\": 0,\n" +
-//                        "                        \"x\": 0\n" +
-//                        "                    }\n" +
-//                        "                }\n" +
-//                        "            }\n" +
-//                        "        }\n" +
-//                        "    }\n" +
-//                        "}";
-//                Log.d(TAG, "send /move_base/goal msg " + msg);
-//                client.send(msg);
-//            }
-//        });
 
-        Button mABtn = (Button) findViewById(R.id.test_navi_a);
-        Button mBBtn = (Button) findViewById(R.id.test_navi_b);
-        Button mCBtn = (Button) findViewById(R.id.test_navi_c);
-        Button mDBtn = (Button) findViewById(R.id.test_navi_d);
-        Button mEBtn = (Button) findViewById(R.id.test_navi_e);
-        Button mFBtn = (Button) findViewById(R.id.test_navi_f);
-        Button mFFBtn = (Button) findViewById(R.id.test_navi_ee);
 
-        mABtn.setOnClickListener(this);
-        mBBtn.setOnClickListener(this);
-        mCBtn.setOnClickListener(this);
-        mDBtn.setOnClickListener(this);
-        mEBtn.setOnClickListener(this);
-        mFBtn.setOnClickListener(this);
-
-        mFFBtn.setOnClickListener(this);
-
+        Button ceshi = (Button) findViewById(R.id.ceshi);
+        ceshi.setOnClickListener(this);
         // 导航状态
         mState = (Button) findViewById(R.id.nav_state);
         mState.setOnClickListener(this);
@@ -251,6 +192,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 暂停接收导航状态
         Button stop_nav_state_btn = (Button) findViewById(R.id.stop_nav_state);
         stop_nav_state_btn.setOnClickListener(this);
+
+        // 导航
+        Button n_400 = (Button) findViewById(R.id.nav_400_go);
+        Button n_400_ = (Button) findViewById(R.id.nav_400_go_go);
+        n_400.setOnClickListener(this);
+        n_400_.setOnClickListener(this);
+
+        // 导航
+        Button n_401 = (Button) findViewById(R.id.nav_401_go);
+        Button n_401_ = (Button) findViewById(R.id.nav_401_go_go);
+        n_401.setOnClickListener(this);
+        n_401_.setOnClickListener(this);
+
+        Button n_402 = (Button) findViewById(R.id.nav_402_go);
+        Button n_402_ = (Button) findViewById(R.id.nav_402_go_go);
+        n_402.setOnClickListener(this);
+        n_402_.setOnClickListener(this);
+
+        Button n_403 = (Button) findViewById(R.id.nav_403_go);
+        Button n_403_ = (Button) findViewById(R.id.nav_403_go_go);
+        n_403.setOnClickListener(this);
+        n_403_.setOnClickListener(this);
+
+        Button n_404 = (Button) findViewById(R.id.nav_404_go);
+        Button n_404_ = (Button) findViewById(R.id.nav_404_go_go);
+        n_404.setOnClickListener(this);
+        n_404_.setOnClickListener(this);
+
+        Button charge = (Button) findViewById(R.id.test_navi_f);
+        charge.setOnClickListener(this);
+
+        Button poiBtn = (Button) findViewById(R.id.nav_poi);
+        poiBtn.setOnClickListener(this);
+
+        Button poiCancelBtn = (Button) findViewById(R.id.nav_poi_cancel);
+        poiCancelBtn.setOnClickListener(this);
     }
 
     String mPointName = null;
@@ -265,60 +242,74 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mWSURL = mIPEdit.getText().toString().trim();
                 connect(mWSURL);
                 break;
-            case R.id.test_navi_a:
-//                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_A_601\"}}");
-                client.send("{" + "\"op\": \"publish\"," + "\"topic\": \"/cmd_string\"," + "\"msg\": \"cancel\"" + "}");
-                String t = new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_6_A_601"));
-                mNavPointName = "map_6_A_601";
-                mNavPointState = 1;
-                Log.d("zheng", "正在导航去 " + mNavPointName + " 点");
-                client.send(t);
-                mPointName = "map_6_A_601";
+            case R.id.nav_poi:
+                Intent intent = new Intent(this, PostionMonitorService.class);
+                bindService(intent, conn, BIND_AUTO_CREATE);
                 break;
-            case R.id.test_navi_b:
-//                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_A_602\"}}");
-                client.send("{" + "\"op\": \"publish\"," + "\"topic\": \"/cmd_string\"," + "\"msg\": \"cancel\"" + "}");
-                mNavPointName = "map_6_A_602";
-                mNavPointState = 1;
-                Log.d("zheng", "正在导航去 " + mNavPointName + " 点");
-                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_6_A_602")));
-                mPointName = "map_6_A_602";
+            case R.id.nav_poi_cancel:
+                unbindService(conn);
                 break;
-            case R.id.test_navi_c:
-//                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_A_603\"}}");
-                client.send("{" + "\"op\": \"publish\"," + "\"topic\": \"/cmd_string\"," + "\"msg\": \"cancel\"" + "}");
-                mNavPointName = "map_6_A_603";
+            case R.id.nav_400_go:
+                mNavPointName = "map_4_A_400";
                 mNavPointState = 1;
-                Log.d("zheng", "正在导航去 " + mNavPointName + " 点");
-                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_6_A_603")));
-                mPointName = "map_6_A_603";
+                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_400")));
+                mPointName = "map_4_A_400";
                 break;
-            case R.id.test_navi_d:
-//                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_B_604\"}}");
-                client.send("{" + "\"op\": \"publish\"," + "\"topic\": \"/cmd_string\"," + "\"msg\": \"cancel\"" + "}");
-                mNavPointName = "map_6_B_604";
+            case R.id.nav_400_go_go:
+                mNavPointName = "map_4_A_400_map";
                 mNavPointState = 1;
-                Log.d("zheng", "正在导航去 " + mNavPointName + " 点");
-                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_6_B_604")));
-                mPointName = "map_6_B_604";
+                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_400_map")));
+                mPointName = "map_4_A_400_map";
                 break;
-            case R.id.test_navi_e:
-//                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_B_605\"}}");
-                client.send("{" + "\"op\": \"publish\"," + "\"topic\": \"/cmd_string\"," + "\"msg\": \"cancel\"" + "}");
-                mNavPointName = "map_6_B_605";
+            case R.id.nav_401_go:
+                mNavPointName = "map_4_A_401";
                 mNavPointState = 1;
-                Log.d("zheng", "正在导航去 " + mNavPointName + " 点");
-                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_6_B_605")));
-                mPointName = "map_6_B_605";
+                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_401")));
+                mPointName = "map_4_A_401";
                 break;
-            case R.id.test_navi_ee:
-//                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"map_6_B_605\"}}");
-                client.send("{" + "\"op\": \"publish\"," + "\"topic\": \"/cmd_string\"," + "\"msg\": \"cancel\"" + "}");
-                mNavPointName = "map_6_B_605_map";
+            case R.id.nav_401_go_go:
+                mNavPointName = "map_4_A_401_map";
                 mNavPointState = 1;
-                Log.d("zheng", "正在导航去 " + mNavPointName + " 点");
-                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_6_B_605_map")));
-                mPointName = "map_6_B_605_map";
+                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_401_map")));
+                mPointName = "map_4_A_401_map";
+                break;
+            case R.id.nav_402_go:
+                mNavPointName = "map_4_A_402";
+                mNavPointState = 1;
+                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_402")));
+                mPointName = "map_4_A_402";
+                break;
+            case R.id.nav_402_go_go:
+                mNavPointName = "map_4_A_402_map";
+                mNavPointState = 1;
+                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_402_map")));
+                mPointName = "map_4_A_402_map";
+                break;
+
+            case R.id.nav_403_go:
+                mNavPointName = "map_4_A_403";
+                mNavPointState = 1;
+                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_403")));
+                mPointName = "map_4_A_403";
+                break;
+            case R.id.nav_403_go_go:
+                mNavPointName = "map_4_A_403_map";
+                mNavPointState = 1;
+                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_403_map")));
+                mPointName = "map_4_A_403_map";
+                break;
+
+            case R.id.nav_404_go:
+                mNavPointName = "map_4_A_404";
+                mNavPointState = 1;
+                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_404")));
+                mPointName = "map_4_A_404";
+                break;
+            case R.id.nav_404_go_go:
+                mNavPointName = "map_4_A_404_map";
+                mNavPointState = 1;
+                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_404_map")));
+                mPointName = "map_4_A_404_map";
                 break;
             case R.id.test_navi_f:
                 client.send("{" + "\"op\": \"publish\"," + "\"topic\": \"/rosnodejs/charge_ctrl\"," + "\"msg\": {" + "\"data\": \"charge\"" + "}" + "}");
@@ -332,20 +323,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.nav_state:
                 client.send("{" + "\"op\": \"subscribe\"," + "\"topic\": \"/move_base/status\"," + "\"throttle_rate\": 1888" + "}");
-//                client.send("{" + "\"op\": \"subscribe\"," + "\"topic\": \"/move_base/status\"" +  "}");
                 break;
             case R.id.stop_nav_state:
-
                 Log.d("click", NavHelper.getTime());
-
                 client.send("{" + "\"op\": \"unsubscribe\"," + "\"topic\": \"/move_base/status\"" + "}");
-
                 Log.d("click", NavHelper.getTime());
-
                 break;
             // 同步站点数据
             case R.id.ansy_data:
                 client.send("{ \"op\": \"subscribe\", \"topic\": \"/waypoints\"}");
+                break;
+            case R.id.ceshi:
+                client.send("{\"op\":\"publish\",\"topic\":\"/cmd_string\",\"msg\":{\"data\":\"cancel\"}}");
                 break;
         }
     }
@@ -479,13 +468,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if (!mCurrentPointName.equals(name)) return;
                         // 如果站点名称包含当前导航的名称
                         if (name.equals(mPointName)) {
-                            client.send("{" + "\"op\": \"publish\"," + "\"topic\": \"/cmd_string\"," + "\"msg\": \"cancel\"" + "}");
                             client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get(mPointName + "_map")));
                             mCurrentPointName = mPointName + "_map";
                         }
-
                         if (name.contains("_map") && name.contains(mPointName)) {
-                            client.send("{" + "\"op\": \"publish\"," + "\"topic\": \"/cmd_string\"," + "\"msg\": \"cancel\"" + "}");
                             client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get(mPointName)));
                             mCurrentPointName = mPointName;
                         }
@@ -580,61 +566,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 // 连接成功 获取设备信息
                 case 1:
-//                    mStateText
-                    // getNodes
-//                    try {
-//                        String[] m = client.getNodes();
-//                        StringBuffer sb = new StringBuffer();
-//                        for(int i = 0; i < m.length; i++){
-//                            sb. append(m[i]);
-//                        }
-//                        String s = sb.toString();
-//                        mStateText.setText(s);
-//                        Log.d("whsgzcy","MainActivity getNodes --> = " + s);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-
-                    // getService
-//                    try {
-//                        String[] m = client.getServices();
-//                        StringBuffer sb = new StringBuffer();
-//                        for(int i = 0; i < m.length; i++){
-//                            String str = "";
-//                            sb. append(m[i]);
-//                            str = m[i];
-//                            Log.d("whsgzcy",str);
-//                        }
-//                        String s = sb.toString();
-//                        mStateText.setText(s);
-//                        Log.d("whsgzcy","MainActivity getService --> = " + s);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-
-                    // getTopics
-//                    try {
-//                        String[] m = client.getTopics();
-//                        StringBuffer sb = new StringBuffer();
-//                        for(int i = 0; i < m.length; i++){
-//                            String str = "";
-//                            sb. append(m[i]);
-//                            str = m[i];
-//                            Log.d("whsgzcy",str);
-//                        }
-//                        String s = sb.toString();
-//                        mStateText.setText(s);
-//                        Log.d("whsgzcy","MainActivity getTopics --> = " + s);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-                    //get_Time()
-//                    String get_time = "{\"op\":\"call_service\",\"service\":\"" + "/rosapi/get_time" + "\",\"args\":["+""+"]}";
-//                    client.send(get_time);
-//                    Log.d("whsgzcy","MainActivity get_time --> = " + get_time);
-
-                    // /move_base/status
-//                    client.send("{\"op\":\"subscribe\",\"topic\":\"" + "/move_base/status" + "\"}");
                     break;
             }
         }
