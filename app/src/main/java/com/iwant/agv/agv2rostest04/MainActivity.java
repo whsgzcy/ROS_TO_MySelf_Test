@@ -236,6 +236,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button cmd_vel = (Button) findViewById(R.id.cmd_vel);
         cmd_vel.setOnClickListener(this);
+
+        Button nav_ctrl0 = (Button) findViewById(R.id.nav_ctrl_0);
+        nav_ctrl0.setOnClickListener(this);
+        Button nav_ctrl1 = (Button) findViewById(R.id.nav_ctrl_1);
+        nav_ctrl1.setOnClickListener(this);
+        Button nav_ctrl2 = (Button) findViewById(R.id.nav_ctrl_2);
+        nav_ctrl2.setOnClickListener(this);
         // 导航状态
         mState = (Button) findViewById(R.id.nav_state);
         mState.setOnClickListener(this);
@@ -403,6 +410,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.cmd_vel:
                 client.send("{\"op\":\"publish\",\"topic\":\"/cmd_vel\",\"msg\":{\"linear\":{\"x\":0,\"y\":0,\"z\":0},\"angular\":{\"x\":0,\"y\":0,\"z\":0}}}");
+                break;
+            case R.id.nav_ctrl_0:
+                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":0,\"goal_name\":\"\"\"\"}}");
+                break;
+            case R.id.nav_ctrl_1:
+                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"\"\"\"}}");
+                break;
+            case R.id.nav_ctrl_2:
+                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":2,\"goal_name\":\"\"\"\"}}");
                 break;
         }
     }

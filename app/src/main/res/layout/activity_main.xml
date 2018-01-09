@@ -253,6 +253,24 @@
                     android:layout_height="wrap_content"
                     android:text="cmd_vel" />
 
+                <Button
+                    android:id="@+id/nav_ctrl_0"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="nav_ctrl_0" />
+
+                <Button
+                    android:id="@+id/nav_ctrl_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="nav_ctrl_1" />
+
+                <Button
+                    android:id="@+id/nav_ctrl_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="nav_ctrl_2" />
+
             </LinearLayout>
         </RelativeLayout>
     </ScrollView>
