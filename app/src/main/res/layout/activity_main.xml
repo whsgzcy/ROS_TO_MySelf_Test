@@ -247,6 +247,12 @@
                     android:layout_height="wrap_content"
                     android:text="CANCEL" />
 
+                <Button
+                    android:id="@+id/cmd_vel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="cmd_vel" />
+
             </LinearLayout>
         </RelativeLayout>
     </ScrollView>

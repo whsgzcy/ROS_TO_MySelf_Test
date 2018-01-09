@@ -84,8 +84,8 @@ public class PostionMonitorService extends Service {
             // position x and y
             double p_x = footResult.getPolygon().getPoints().get(3).getX();
             double p_y = footResult.getPolygon().getPoints().get(3).getY();
-            if (p_x >= -0.2) {
-
+            if (p_x >= -0.25) {
+                GEI_POI = -1;
                 Intent intent = new Intent();
                 intent.setAction("com.iwant.action");
                 intent.putExtra("action", "cancel");
@@ -94,7 +94,6 @@ public class PostionMonitorService extends Service {
                 Log.d("yu", "hava already sent");
 
                 // 取消订阅
-//                mClient.send("{" + "\"op\": \"unsubscribe\"," + "\"topic\": \"/move_base/local_costmap/footprint\"" + "}");
                 Log.d("yu", "x = " + footResult.getPolygon().getPoints().get(3).getX());
                 Message message = new Message();
                 message.what = 1;
@@ -112,12 +111,11 @@ public class PostionMonitorService extends Service {
             switch (msg.what) {
                 case 1:
                     Log.d("yu", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-                    GEI_POI = -1;
                     // 先让底盘不动
                     mClient.send("{\"op\":\"publish\",\"topic\":\"/cmd_string\",\"msg\":{\"data\":\"cancel\"}}");
                     Log.d("yu", "hava canceled");
                     mPOI.cancel();
-                    // 3s后回调此函数 让设备从充电桩上下来
+                    // 7s后回调此函数 让设备从充电桩上下来
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {

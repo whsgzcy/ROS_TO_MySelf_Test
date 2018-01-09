@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         @Override
                         public void run() {
                             Message message = new Message();
-                            message.what = 2;
+                            message.what = 3;
                             mHandler.sendMessage(message);
                         }
                     }, 8000);
@@ -94,8 +94,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 @Override
                 public void cancel() {
-                    client.send("{\"op\":\"publish\",\"topic\":\"/cmd_string\",\"msg\":{\"data\":\"cancel\"}}");
-                    Log.d("yu", "main hava canceled");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            client.send("{\"op\":\"publish\",\"topic\":\"/cmd_string\",\"msg\":{\"data\":\"cancel\"}}");
+                            mDownBtn.setText("UI时间已触发");
+                            Log.d("yu", "main hava canceled");
+
+                        }
+                    });
                 }
             });
         }
@@ -112,13 +119,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             super.handleMessage(msg);
             switch (msg.what) {
                 case 2:
+                    break;
+                // 连接成功 获取设备信息
+                case 1:
+                    break;
+                case 3:
                     mNavPointName = "map_4_A_400";
                     mNavPointState = 1;
                     client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_400")));
                     mPointName = "map_4_A_400";
-                    break;
-                // 连接成功 获取设备信息
-                case 1:
                     break;
             }
         }
@@ -224,6 +233,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button ceshi = (Button) findViewById(R.id.ceshi);
         ceshi.setOnClickListener(this);
+
+        Button cmd_vel = (Button) findViewById(R.id.cmd_vel);
+        cmd_vel.setOnClickListener(this);
         // 导航状态
         mState = (Button) findViewById(R.id.nav_state);
         mState.setOnClickListener(this);
@@ -389,6 +401,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.ceshi:
                 client.send("{\"op\":\"publish\",\"topic\":\"/cmd_string\",\"msg\":{\"data\":\"cancel\"}}");
                 break;
+            case R.id.cmd_vel:
+                client.send("{\"op\":\"publish\",\"topic\":\"/cmd_vel\",\"msg\":{\"linear\":{\"x\":0,\"y\":0,\"z\":0},\"angular\":{\"x\":0,\"y\":0,\"z\":0}}}");
+                break;
         }
     }
 
@@ -399,7 +414,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // 取消底盘
             if (state.equals("cancel")) {
                 Log.d("yu", "i'm have receviced");
-                client.send("{\"op\":\"publish\",\"topic\":\"/cmd_string\",\"msg\":{\"data\":\"cancel\"}}");
+//                client.send("{\"op\":\"publish\",\"topic\":\"/cmd_string\",\"msg\":{\"data\":\"cancel\"}}");
             }
         }
     };
