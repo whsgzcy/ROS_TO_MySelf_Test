@@ -412,6 +412,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 client.send("{\"op\":\"publish\",\"topic\":\"/cmd_vel\",\"msg\":{\"linear\":{\"x\":0,\"y\":0,\"z\":0},\"angular\":{\"x\":0,\"y\":0,\"z\":0}}}");
                 break;
             case R.id.nav_ctrl_0:
+//                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":0,\"goal_name\":\"\"}}");
                 client.send("{\"op\": \"publish\",\"topic\": \"/nav_ctrl\",\"msg\": {\"control\": 0,\"goal_name\": \"\"}}");
                 break;
             case R.id.nav_ctrl_1:
@@ -536,6 +537,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Log.d("move", "MainAcitvity getStatus = " + 1);
                         Log.d("move", "MainAcitvity mPointName = " + mPointName);
                         Log.d("move", "MainAcitvity mCurrentPointName = " + mCurrentPointName);
+                    }
+                    // 导航为2,取消所有运动
+                    if (mbs.getStatus_list().get(i).getStatus() == 2) {
+                        Log.d("move", "/n");
+                        Log.d("move", "MainAcitvity getStatus = " + 2);
+                        Log.d("move", "MainAcitvity mPointName = " + mPointName);
+                        Log.d("move", "MainAcitvity mCurrentPointName = " + mCurrentPointName);
+                        if (mPointName == null) return;
+                        if (mCurrentPointName == null) return;
+                        if (!mCurrentPointName.equals(name)) return;
+                        // 如果站点名称包含当前导航的名称
+                        if (name.equals(mPointName)) {
+                            client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get(mPointName + "_map")));
+                            mCurrentPointName = mPointName + "_map";
+                        }
+                        if (name.contains("_map") && name.contains(mPointName)) {
+                            client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get(mPointName)));
+                            mCurrentPointName = mPointName;
+                        }
                     }
                     // 导航为3,到达
                     if (mbs.getStatus_list().get(i).getStatus() == 3) {
