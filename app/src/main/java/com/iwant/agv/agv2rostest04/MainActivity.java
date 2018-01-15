@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mUnPowerBtn = (Button) findViewById(R.id.unpower);
         mUnPowerBtn.setOnClickListener(this);
 
-        mIPEdit.setText("ws://192.168.4.11:9090");
+        mIPEdit.setText("ws://192.168.0.9:9090");
 
         mUpBtn.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -302,7 +302,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             // 连接 IP
             case R.id.connect_btn:
-                mIPEdit.setText("ws://192.168.4.11:9090");
+                mIPEdit.setText("ws://192.168.0.9:9090");
                 mWSURL = mIPEdit.getText().toString().trim();
                 connect(mWSURL);
                 break;
@@ -412,13 +412,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 client.send("{\"op\":\"publish\",\"topic\":\"/cmd_vel\",\"msg\":{\"linear\":{\"x\":0,\"y\":0,\"z\":0},\"angular\":{\"x\":0,\"y\":0,\"z\":0}}}");
                 break;
             case R.id.nav_ctrl_0:
-                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":0,\"goal_name\":\"\"\"\"}}");
+                client.send("{\"op\": \"publish\",\"topic\": \"/nav_ctrl\",\"msg\": {\"control\": 0,\"goal_name\": \"\"}}");
                 break;
             case R.id.nav_ctrl_1:
-                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":1,\"goal_name\":\"\"\"\"}}");
+                client.send("{\"op\": \"publish\",\"topic\": \"/nav_ctrl\",\"msg\": {\"control\": 1,\"goal_name\": \"\"}}");
                 break;
             case R.id.nav_ctrl_2:
-                client.send("{\"op\":\"publish\",\"topic\":\"/nav_ctrl\",\"msg\":{\"control\":2,\"goal_name\":\"\"\"\"}}");
+                client.send("{\"op\": \"publish\",\"topic\": \"/nav_ctrl\",\"msg\": {\"control\": 2,\"goal_name\": \"\"}}");
                 break;
         }
     }
