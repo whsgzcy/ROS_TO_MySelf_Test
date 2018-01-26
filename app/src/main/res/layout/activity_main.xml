@@ -219,6 +219,12 @@
                     android:text="yu" />
 
                 <Button
+                    android:id="@+id/initpose"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="initpose" />
+
+                <Button
                     android:id="@+id/test_navi_f"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

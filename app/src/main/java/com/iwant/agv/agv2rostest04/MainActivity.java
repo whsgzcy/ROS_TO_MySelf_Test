@@ -253,6 +253,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button yuBtn = (Button) findViewById(R.id.map_yu);
         yuBtn.setOnClickListener(this);
 
+        Button initPose = (Button) findViewById(R.id.initpose);
+        initPose.setOnClickListener(this);
+
 //        Button poiCancelBtn = (Button) findViewById(R.id.nav_poi_cancel);
 //        poiCancelBtn.setOnClickListener(this);
 
@@ -366,6 +369,70 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         "\t\"msg\": {\n" +
                         "\t\t\"data\": \"dbparam-update:yu\"\n" +
                         "\t}\n" +
+                        "}");
+                break;
+                case R.id.initpose:
+                client.send("{\n" +
+                        "    \"op\": \"publish\",\n" +
+                        "    \"topic\": \"/initialpose\",\n" +
+                        "    \"msg\": {\n" +
+                        "        \"header\": {\n" +
+                        "            \"frame_id\": \"map\"\n" +
+                        "        },\n" +
+                        "        \"pose\": {\n" +
+                        "            \"pose\": {\n" +
+                        "                \"position\": {\n" +
+                        "                    \"x\": 0,\n" +
+                        "                    \"y\": 0,\n" +
+                        "                    \"z\": 0\n" +
+                        "                },\n" +
+                        "                \"orientation\": {\n" +
+                        "                    \"x\": 0,\n" +
+                        "                    \"y\": 0,\n" +
+                        "                    \"z\": 0,\n" +
+                        "                    \"w\": 1\n" +
+                        "                }\n" +
+                        "            },\n" +
+                        "            \"covariance\": [\n" +
+                        "                0.25,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0.25,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0,\n" +
+                        "                0.06853891945200942\n" +
+                        "            ]\n" +
+                        "        }\n" +
+                        "    }\n" +
                         "}");
                 break;
             case R.id.test_navi_f:
