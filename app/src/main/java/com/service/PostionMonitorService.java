@@ -29,15 +29,9 @@ public class PostionMonitorService extends Service {
     private String TAG = "PostionMonitorService";
     private ROSBridgeClient mClient;
 
-    private POI mPOI;
-
     private int GEI_POI = 0;
 
     public class MyBinder extends Binder {
-
-        public void setPoiListener(POI poi) {
-            mPOI = poi;
-        }
 
         public void getPoi(ROSBridgeClient client) {
             mClient = client;
@@ -79,12 +73,15 @@ public class PostionMonitorService extends Service {
     public void onEventMain(PoiEvent event) {
         FootPrintResult footResult = new Gson().fromJson(event.msg, FootPrintResult.class);
         Log.d("yu", "x = " + footResult.getPolygon().getPoints().get(3).getX());
-        if (GEI_POI == -1) return;
         if (footResult != null) {
             // position x and y
             double p_x = footResult.getPolygon().getPoints().get(3).getX();
             double p_y = footResult.getPolygon().getPoints().get(3).getY();
             if (p_x >= -0.25) {
+
+                mClient.send("{\"op\":\"publish\",\"topic\":\"/cmd_vel\",\"msg\":{\"linear\":{\"x\":0,\"y\":0,\"z\":0},\"angular\":{\"x\":0,\"y\":0,\"z\":0}}}");
+
+                if (GEI_POI == -1) return;
                 GEI_POI = -1;
                 Intent intent = new Intent();
                 intent.setAction("com.iwant.action");
@@ -92,41 +89,36 @@ public class PostionMonitorService extends Service {
                 sendBroadcast(intent);
 
                 Log.d("yu", "hava already sent");
-
-                // 取消订阅
-                Log.d("yu", "x = " + footResult.getPolygon().getPoints().get(3).getX());
-                Message message = new Message();
-                message.what = 1;
-                mHandler.sendMessage(message);
             }
-            mPOI.poi_x(p_x);
-            mPOI.poi_y(p_y);
         }
     }
 
-    Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case 1:
-                    Log.d("yu", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-                    // 先让底盘不动
-                    mClient.send("{\"op\":\"publish\",\"topic\":\"/cmd_string\",\"msg\":{\"data\":\"cancel\"}}");
-                    Log.d("yu", "hava canceled");
-                    mPOI.cancel();
-                    // 7s后回调此函数 让设备从充电桩上下来
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mClient.send("{\"op\":\"publish\",\"topic\":\"/odom_reset\",\"msg\":{}}");
-                            mPOI.unCharge();
-                        }
-                    }, 7000);
-                    break;
-            }
-        }
-    };
+//    Handler mHandler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            super.handleMessage(msg);
+//            switch (msg.what) {
+//                case 1:
+//                    Log.d("yu", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+//                    // 先让底盘不动
+//                    mClient.send("{\"op\":\"publish\",\"topic\":\"/cmd_string\",\"msg\":{\"data\":\"cancel\"}}");
+//                    Log.d("yu", "hava canceled");
+//                    mPOI.cancel();
+//                    // 7s后回调此函数 让设备从充电桩上下来
+//                    new Handler().postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            mClient.send("{\"op\":\"publish\",\"topic\":\"/odom_reset\",\"msg\":{}}");
+//                            mPOI.unCharge();
+//                        }
+//                    }, 7000);
+//                    break;
+//                case 2:
+//
+//                    break;
+//            }
+//        }
+//    };
 
     @Override
     public void onDestroy() {
@@ -136,15 +128,5 @@ public class PostionMonitorService extends Service {
             mClient.send(unmsg);
         }
         EventBus.getDefault().unregister(this);
-    }
-
-    public interface POI {
-        void poi_x(double x);
-
-        void poi_y(double y);
-
-        void unCharge();
-
-        void cancel();
     }
 }

@@ -207,6 +207,18 @@
                 </LinearLayout>
 
                 <Button
+                    android:id="@+id/map_master"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="master" />
+
+                <Button
+                    android:id="@+id/map_yu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="yu" />
+
+                <Button
                     android:id="@+id/test_navi_f"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

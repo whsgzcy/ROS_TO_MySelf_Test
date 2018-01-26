@@ -67,44 +67,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public void onServiceConnected(ComponentName name, IBinder service) {
             binder = (PostionMonitorService.MyBinder) service;
             binder.getPoi(client);
-            binder.setPoiListener(new PostionMonitorService.POI() {
-                @Override
-                public void poi_x(double x) {
-
-                }
-
-                @Override
-                public void poi_y(double y) {
-
-                }
-
-                @Override
-                public void unCharge() {
-                    // 下发下充电桩操作
-                    client.send("{" + "\"op\": \"publish\"," + "\"topic\": \"/rosnodejs/charge_ctrl\"," + "\"msg\": {" + "\"data\": \"uncharge\"" + "}" + "}");
-                    mHandler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            Message message = new Message();
-                            message.what = 3;
-                            mHandler.sendMessage(message);
-                        }
-                    }, 8000);
-                }
-
-                @Override
-                public void cancel() {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            client.send("{\"op\":\"publish\",\"topic\":\"/cmd_string\",\"msg\":{\"data\":\"cancel\"}}");
-                            mDownBtn.setText("UI时间已触发");
-                            Log.d("yu", "main hava canceled");
-
-                        }
-                    });
-                }
-            });
         }
 
         @Override
@@ -285,6 +247,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button poiBtn = (Button) findViewById(R.id.nav_poi);
         poiBtn.setOnClickListener(this);
 
+        Button masterBtn = (Button) findViewById(R.id.map_master);
+        masterBtn.setOnClickListener(this);
+
+        Button yuBtn = (Button) findViewById(R.id.map_yu);
+        yuBtn.setOnClickListener(this);
+
 //        Button poiCancelBtn = (Button) findViewById(R.id.nav_poi_cancel);
 //        poiCancelBtn.setOnClickListener(this);
 
@@ -381,6 +349,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mNavPointState = 1;
                 client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_404_map")));
                 mPointName = "map_4_A_404_map";
+                break;
+            case R.id.map_master:
+                client.send("{\n" +
+                        "\t\"op\": \"publish\",\n" +
+                        "\t\"topic\": \"/cmd_string\",\n" +
+                        "\t\"msg\": {\n" +
+                        "\t\t\"data\": \"dbparam-update:master\"\n" +
+                        "\t}\n" +
+                        "}");
+                break;
+            case R.id.map_yu:
+                client.send("{\n" +
+                        "\t\"op\": \"publish\",\n" +
+                        "\t\"topic\": \"/cmd_string\",\n" +
+                        "\t\"msg\": {\n" +
+                        "\t\t\"data\": \"dbparam-update:yu\"\n" +
+                        "\t}\n" +
+                        "}");
                 break;
             case R.id.test_navi_f:
                 if (binder != null) binder.startPoi();
