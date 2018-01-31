@@ -273,7 +273,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             // 连接 IP
             case R.id.connect_btn:
-                mIPEdit.setText("ws://192.168.0.9:9090");
                 mWSURL = mIPEdit.getText().toString().trim();
                 connect(mWSURL);
                 break;
@@ -436,7 +435,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         "}");
                 break;
             case R.id.test_navi_f:
-                if (binder != null) binder.startPoi();
+//                if (binder != null) binder.startPoi();
                 client.send("{" + "\"op\": \"publish\"," + "\"topic\": \"/rosnodejs/charge_ctrl\"," + "\"msg\": {" + "\"data\": \"charge\"" + "}" + "}");
                 break;
             case R.id.unpower:
@@ -447,7 +446,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 client.send(msg);
                 break;
             case R.id.nav_state:
-                client.send("{" + "\"op\": \"subscribe\"," + "\"topic\": \"/move_base/status\"," + "\"throttle_rate\": 1888" + "}");
+//                client.send("{" + "\"op\": \"subscribe\"," + "\"topic\": \"/move_base/status\"," + "\"throttle_rate\": 1888" + "}");
+                client.send("{\"op\":\"subscribe\",\"topic\":\"/nav_ctrl_status\"}");
                 break;
             case R.id.stop_nav_state:
                 Log.d("click", NavHelper.getTime());
@@ -569,6 +569,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d(TAG, "MainAcitvity response = " + event.id);
         Log.d(TAG, "MainAcitvity response = " + event.name);
         Log.d(TAG, "MainAcitvity response = " + event.msg);
+
+
+        if(event.name.equals("/nav_ctrl_status")){
+
+
+
+            mStateTextView.setText(event.msg);
+
+
+
+
+        }
 
         // 事实的数据 为单点导航使用
         if (event.name.equals("/move_base/status")) {
