@@ -128,6 +128,13 @@
                         android:layout_weight="1"
                         android:text="定位到 缓冲点" />
 
+                    <Button
+                        android:id="@+id/nav_400_init_"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="定位到 缓冲点 _" />
+
                 </LinearLayout>
 
 
@@ -157,6 +164,13 @@
                         android:layout_weight="1"
                         android:text="定位到A" />
 
+                    <Button
+                        android:id="@+id/nav_401_init_"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="定位到A_" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -185,6 +199,13 @@
                         android:layout_weight="1"
                         android:text="定位到B" />
 
+                    <Button
+                        android:id="@+id/nav_402_init_"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="定位到B_" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -212,6 +233,13 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="定位到C" />
+
+                    <Button
+                        android:id="@+id/nav_403_init_"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="定位到C_" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -239,6 +267,13 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="定位到D" />
+
+                    <Button
+                        android:id="@+id/nav_404_init_"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="定位到D_" />
                 </LinearLayout>
 
                 <Button

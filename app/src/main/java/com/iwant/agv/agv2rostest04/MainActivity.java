@@ -24,6 +24,7 @@ import com.helper.NavHelper;
 import com.jilk.ros.ROSClient;
 import com.jilk.ros.rosbridge.ROSBridgeClient;
 import com.map.WayPointUtil;
+import com.model.InitPoseResult;
 import com.nav.Move_Base_Status;
 import com.nav.NavPublich;
 import com.nav.TMove_Base_Goal;
@@ -218,38 +219,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button n_400 = (Button) findViewById(R.id.nav_400_go);
         Button n_400_ = (Button) findViewById(R.id.nav_400_go_go);
         Button n_400_init = (Button) findViewById(R.id.nav_400_init);
+        Button n_400_init_ = (Button) findViewById(R.id.nav_400_init_);
         n_400.setOnClickListener(this);
         n_400_.setOnClickListener(this);
         n_400_init.setOnClickListener(this);
+        n_400_init_.setOnClickListener(this);
 
         // 导航
         Button n_401 = (Button) findViewById(R.id.nav_401_go);
         Button n_401_ = (Button) findViewById(R.id.nav_401_go_go);
         Button n_401_init = (Button) findViewById(R.id.nav_401_init);
+        Button n_401_init_ = (Button) findViewById(R.id.nav_401_init_);
         n_401.setOnClickListener(this);
         n_401_.setOnClickListener(this);
         n_401_init.setOnClickListener(this);
+        n_401_init_.setOnClickListener(this);
 
         Button n_402 = (Button) findViewById(R.id.nav_402_go);
         Button n_402_ = (Button) findViewById(R.id.nav_402_go_go);
         Button n_402_init = (Button) findViewById(R.id.nav_402_init);
+        Button n_402_init_ = (Button) findViewById(R.id.nav_402_init_);
         n_402.setOnClickListener(this);
         n_402_.setOnClickListener(this);
         n_402_init.setOnClickListener(this);
+        n_402_init_.setOnClickListener(this);
 
         Button n_403 = (Button) findViewById(R.id.nav_403_go);
         Button n_403_ = (Button) findViewById(R.id.nav_403_go_go);
         Button n_403_init = (Button) findViewById(R.id.nav_403_init);
+        Button n_403_init_ = (Button) findViewById(R.id.nav_403_init_);
         n_403.setOnClickListener(this);
         n_403_.setOnClickListener(this);
         n_403_init.setOnClickListener(this);
+        n_403_init_.setOnClickListener(this);
 
         Button n_404 = (Button) findViewById(R.id.nav_404_go);
         Button n_404_ = (Button) findViewById(R.id.nav_404_go_go);
         Button n_404_init = (Button) findViewById(R.id.nav_404_init);
+        Button n_404_init_ = (Button) findViewById(R.id.nav_404_init_);
         n_404.setOnClickListener(this);
         n_404_.setOnClickListener(this);
         n_404_init.setOnClickListener(this);
+        n_404_init_.setOnClickListener(this);
 
         Button charge = (Button) findViewById(R.id.test_navi_f);
         charge.setOnClickListener(this);
@@ -313,8 +324,60 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mPointName = "map_4_A_400_map";
                 break;
             case R.id.nav_400_init:
-                if(mNavPointName == null) return;
-                TMove_Base_Goal t = mNavPublich.getNavPublishHashMap().get(mNavPointName);
+                TMove_Base_Goal o = mNavPublich.getNavPublishHashMap().get("map_4_A_400");
+                InitPoseResult oi = new InitPoseResult();
+
+                InitPoseResult.MsgBean msgbean = new InitPoseResult.MsgBean();
+
+                InitPoseResult.MsgBean.PoseBeanX p = new InitPoseResult.MsgBean.PoseBeanX();
+                p.setCovariance();
+
+                InitPoseResult.MsgBean.PoseBeanX.PoseBean pp = new InitPoseResult.MsgBean.PoseBeanX.PoseBean();
+
+                InitPoseResult.MsgBean.PoseBeanX.PoseBean.PositionBean ppp = new InitPoseResult.MsgBean.PoseBeanX.PoseBean.PositionBean();
+
+                ppp.setX(o.getMsg().getGoal().getTarget_pose().getPose().getPosition().getX());
+                ppp.setY(o.getMsg().getGoal().getTarget_pose().getPose().getPosition().getY());
+                ppp.setZ(o.getMsg().getGoal().getTarget_pose().getPose().getPosition().getZ());
+
+                InitPoseResult.MsgBean.PoseBeanX.PoseBean.OrientationBean ppo = new InitPoseResult.MsgBean.PoseBeanX.PoseBean.OrientationBean();
+
+                ppo.setW(o.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getW());
+                ppo.setX(o.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getX());
+                ppo.setY(o.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getY());
+                ppo.setZ(o.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getZ());
+
+                pp.setPosition(ppp);
+                pp.setOrientation(ppo);
+                p.setPose(pp);
+
+                msgbean.setPose(p);
+                oi.setMsg(msgbean);
+
+                client.send(new Gson().toJson(oi));
+                break;
+            case R.id.nav_400_init_:
+                TMove_Base_Goal o_ = mNavPublich.getNavPublishHashMap().get("map_4_A_400_map");
+                InitPoseResult oi_ = new InitPoseResult();
+                InitPoseResult.MsgBean msgbean_ = new InitPoseResult.MsgBean();
+                InitPoseResult.MsgBean.PoseBeanX p_ = new InitPoseResult.MsgBean.PoseBeanX();
+                p_.setCovariance();
+                InitPoseResult.MsgBean.PoseBeanX.PoseBean pp_ = new InitPoseResult.MsgBean.PoseBeanX.PoseBean();
+                InitPoseResult.MsgBean.PoseBeanX.PoseBean.PositionBean ppp_ = new InitPoseResult.MsgBean.PoseBeanX.PoseBean.PositionBean();
+                ppp_.setX(o_.getMsg().getGoal().getTarget_pose().getPose().getPosition().getX());
+                ppp_.setY(o_.getMsg().getGoal().getTarget_pose().getPose().getPosition().getY());
+                ppp_.setZ(o_.getMsg().getGoal().getTarget_pose().getPose().getPosition().getZ());
+                InitPoseResult.MsgBean.PoseBeanX.PoseBean.OrientationBean ppo_ = new InitPoseResult.MsgBean.PoseBeanX.PoseBean.OrientationBean();
+                ppo_.setW(o_.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getW());
+                ppo_.setX(o_.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getX());
+                ppo_.setY(o_.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getY());
+                ppo_.setZ(o_.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getZ());
+                pp_.setPosition(ppp_);
+                pp_.setOrientation(ppo_);
+                p_.setPose(pp_);
+                msgbean_.setPose(p_);
+                oi_.setMsg(msgbean_);
+                client.send(new Gson().toJson(oi_));
                 break;
             case R.id.nav_401_go:
                 mNavPointName = "map_4_A_401";
@@ -329,6 +392,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mPointName = "map_4_A_401_map";
                 break;
             case R.id.nav_401_init:
+                TMove_Base_Goal ao = mNavPublich.getNavPublishHashMap().get("map_4_A_401");
+                InitPoseResult aoi = new InitPoseResult();
+                InitPoseResult.MsgBean amsgbean = new InitPoseResult.MsgBean();
+                InitPoseResult.MsgBean.PoseBeanX ap = new InitPoseResult.MsgBean.PoseBeanX();
+                ap.setCovariance();
+                InitPoseResult.MsgBean.PoseBeanX.PoseBean app = new InitPoseResult.MsgBean.PoseBeanX.PoseBean();
+                InitPoseResult.MsgBean.PoseBeanX.PoseBean.PositionBean appp = new InitPoseResult.MsgBean.PoseBeanX.PoseBean.PositionBean();
+                appp.setX(ao.getMsg().getGoal().getTarget_pose().getPose().getPosition().getX());
+                appp.setY(ao.getMsg().getGoal().getTarget_pose().getPose().getPosition().getY());
+                appp.setZ(ao.getMsg().getGoal().getTarget_pose().getPose().getPosition().getZ());
+                InitPoseResult.MsgBean.PoseBeanX.PoseBean.OrientationBean appo = new InitPoseResult.MsgBean.PoseBeanX.PoseBean.OrientationBean();
+                appo.setW(ao.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getW());
+                appo.setX(ao.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getX());
+                appo.setY(ao.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getY());
+                appo.setZ(ao.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getZ());
+                app.setPosition(appp);
+                app.setOrientation(appo);
+                ap.setPose(app);
+                amsgbean.setPose(ap);
+                aoi.setMsg(amsgbean);
+                client.send(new Gson().toJson(aoi));
+                break;
+            case R.id.nav_401_init_:
+                TMove_Base_Goal ao_ = mNavPublich.getNavPublishHashMap().get("map_4_A_401_map");
+                InitPoseResult aoi_ = new InitPoseResult();
+                InitPoseResult.MsgBean amsgbean_ = new InitPoseResult.MsgBean();
+                InitPoseResult.MsgBean.PoseBeanX ap_ = new InitPoseResult.MsgBean.PoseBeanX();
+                ap_.setCovariance();
+                InitPoseResult.MsgBean.PoseBeanX.PoseBean app_ = new InitPoseResult.MsgBean.PoseBeanX.PoseBean();
+                InitPoseResult.MsgBean.PoseBeanX.PoseBean.PositionBean appp_ = new InitPoseResult.MsgBean.PoseBeanX.PoseBean.PositionBean();
+                appp_.setX(ao_.getMsg().getGoal().getTarget_pose().getPose().getPosition().getX());
+                appp_.setY(ao_.getMsg().getGoal().getTarget_pose().getPose().getPosition().getY());
+                appp_.setZ(ao_.getMsg().getGoal().getTarget_pose().getPose().getPosition().getZ());
+                InitPoseResult.MsgBean.PoseBeanX.PoseBean.OrientationBean appo_ = new InitPoseResult.MsgBean.PoseBeanX.PoseBean.OrientationBean();
+                appo_.setW(ao_.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getW());
+                appo_.setX(ao_.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getX());
+                appo_.setY(ao_.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getY());
+                appo_.setZ(ao_.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getZ());
+                app_.setOrientation(appo_);
+                ap_.setPose(app_);
+                amsgbean_.setPose(ap_);
+                aoi_.setMsg(amsgbean_);
+                client.send(new Gson().toJson(aoi_));
                 break;
             case R.id.nav_402_go:
                 mNavPointName = "map_4_A_402";
@@ -343,6 +449,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mPointName = "map_4_A_402_map";
                 break;
             case R.id.nav_402_init:
+                TMove_Base_Goal bo = mNavPublich.getNavPublishHashMap().get("map_4_A_402");
+                InitPoseResult boi = new InitPoseResult();
+                InitPoseResult.MsgBean bmsgbean = new InitPoseResult.MsgBean();
+                InitPoseResult.MsgBean.PoseBeanX bp = new InitPoseResult.MsgBean.PoseBeanX();
+                InitPoseResult.MsgBean.PoseBeanX.PoseBean bpp = new InitPoseResult.MsgBean.PoseBeanX.PoseBean();
+                InitPoseResult.MsgBean.PoseBeanX.PoseBean.PositionBean bppp = new InitPoseResult.MsgBean.PoseBeanX.PoseBean.PositionBean();
+                InitPoseResult.MsgBean.PoseBeanX.PoseBean.OrientationBean bppo = new InitPoseResult.MsgBean.PoseBeanX.PoseBean.OrientationBean();
+                bp.setCovariance();
+                bppp.setX(bo.getMsg().getGoal().getTarget_pose().getPose().getPosition().getX());
+                bppp.setY(bo.getMsg().getGoal().getTarget_pose().getPose().getPosition().getY());
+                bppp.setZ(bo.getMsg().getGoal().getTarget_pose().getPose().getPosition().getZ());
+                bppo.setW(bo.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getW());
+                bppo.setX(bo.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getX());
+                bppo.setY(bo.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getY());
+                bppo.setZ(bo.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getZ());
+                bpp.setPosition(bppp);
+                bpp.setOrientation(bppo);
+                bp.setPose(bpp);
+                bmsgbean.setPose(bp);
+                boi.setMsg(bmsgbean);
+                client.send(new Gson().toJson(boi));
+                break;
+            case R.id.nav_402_init_:
+                TMove_Base_Goal bo_ = mNavPublich.getNavPublishHashMap().get("map_4_A_402_map");
+                InitPoseResult boi_ = new InitPoseResult();
+                InitPoseResult.MsgBean bmsgbean_ = new InitPoseResult.MsgBean();
+                InitPoseResult.MsgBean.PoseBeanX bp_ = new InitPoseResult.MsgBean.PoseBeanX();
+                InitPoseResult.MsgBean.PoseBeanX.PoseBean bpp_ = new InitPoseResult.MsgBean.PoseBeanX.PoseBean();
+                InitPoseResult.MsgBean.PoseBeanX.PoseBean.PositionBean bppp_ = new InitPoseResult.MsgBean.PoseBeanX.PoseBean.PositionBean();
+                InitPoseResult.MsgBean.PoseBeanX.PoseBean.OrientationBean bppo_ = new InitPoseResult.MsgBean.PoseBeanX.PoseBean.OrientationBean();
+                bp_.setCovariance();
+                bppp_.setX(bo_.getMsg().getGoal().getTarget_pose().getPose().getPosition().getX());
+                bppp_.setY(bo_.getMsg().getGoal().getTarget_pose().getPose().getPosition().getY());
+                bppp_.setZ(bo_.getMsg().getGoal().getTarget_pose().getPose().getPosition().getZ());
+                bppo_.setW(bo_.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getW());
+                bppo_.setX(bo_.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getX());
+                bppo_.setY(bo_.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getY());
+                bppo_.setZ(bo_.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getZ());
+                bpp_.setPosition(bppp_);
+                bpp_.setOrientation(bppo_);
+                bp_.setPose(bpp_);
+                bmsgbean_.setPose(bp_);
+                boi_.setMsg(bmsgbean_);
+                client.send(new Gson().toJson(boi_));
                 break;
             case R.id.nav_403_go:
                 mNavPointName = "map_4_A_403";
@@ -357,6 +507,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mPointName = "map_4_A_403_map";
                 break;
             case R.id.nav_403_init:
+                TMove_Base_Goal co = mNavPublich.getNavPublishHashMap().get("map_4_A_403");
+                InitPoseResult coi = new InitPoseResult();
+                InitPoseResult.MsgBean cmsgbean = new InitPoseResult.MsgBean();
+                InitPoseResult.MsgBean.PoseBeanX cp = new InitPoseResult.MsgBean.PoseBeanX();
+                InitPoseResult.MsgBean.PoseBeanX.PoseBean cpp = new InitPoseResult.MsgBean.PoseBeanX.PoseBean();
+                InitPoseResult.MsgBean.PoseBeanX.PoseBean.PositionBean cppp = new InitPoseResult.MsgBean.PoseBeanX.PoseBean.PositionBean();
+                InitPoseResult.MsgBean.PoseBeanX.PoseBean.OrientationBean cppo = new InitPoseResult.MsgBean.PoseBeanX.PoseBean.OrientationBean();
+                cp.setCovariance();
+                cppp.setX(co.getMsg().getGoal().getTarget_pose().getPose().getPosition().getX());
+                cppp.setY(co.getMsg().getGoal().getTarget_pose().getPose().getPosition().getY());
+                cppp.setZ(co.getMsg().getGoal().getTarget_pose().getPose().getPosition().getZ());
+                cppo.setW(co.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getW());
+                cppo.setX(co.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getX());
+                cppo.setY(co.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getY());
+                cppo.setZ(co.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getZ());
+                cpp.setPosition(cppp);
+                cpp.setOrientation(cppo);
+                cp.setPose(cpp);
+                cmsgbean.setPose(cp);
+                coi.setMsg(cmsgbean);
+                client.send(new Gson().toJson(coi));
+                break;
+            case R.id.nav_403_init_:
+                TMove_Base_Goal co_ = mNavPublich.getNavPublishHashMap().get("map_4_A_403");
+                InitPoseResult coi_ = new InitPoseResult();
+                InitPoseResult.MsgBean cmsgbean_ = new InitPoseResult.MsgBean();
+                InitPoseResult.MsgBean.PoseBeanX cp_ = new InitPoseResult.MsgBean.PoseBeanX();
+                InitPoseResult.MsgBean.PoseBeanX.PoseBean cpp_ = new InitPoseResult.MsgBean.PoseBeanX.PoseBean();
+                InitPoseResult.MsgBean.PoseBeanX.PoseBean.PositionBean cppp_ = new InitPoseResult.MsgBean.PoseBeanX.PoseBean.PositionBean();
+                InitPoseResult.MsgBean.PoseBeanX.PoseBean.OrientationBean cppo_ = new InitPoseResult.MsgBean.PoseBeanX.PoseBean.OrientationBean();
+                cp_.setCovariance();
+                cppp_.setX(co_.getMsg().getGoal().getTarget_pose().getPose().getPosition().getX());
+                cppp_.setY(co_.getMsg().getGoal().getTarget_pose().getPose().getPosition().getY());
+                cppp_.setZ(co_.getMsg().getGoal().getTarget_pose().getPose().getPosition().getZ());
+                cppo_.setW(co_.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getW());
+                cppo_.setX(co_.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getX());
+                cppo_.setY(co_.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getY());
+                cppo_.setZ(co_.getMsg().getGoal().getTarget_pose().getPose().getOrientation().getZ());
+                cpp_.setPosition(cppp_);
+                cpp_.setOrientation(cppo_);
+                cp_.setPose(cpp_);
+                cmsgbean_.setPose(cp_);
+                coi_.setMsg(cmsgbean_);
+                client.send(new Gson().toJson(coi_));
                 break;
             case R.id.nav_404_go:
                 mNavPointName = "map_4_A_404";
@@ -371,6 +565,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mPointName = "map_4_A_404_map";
                 break;
             case R.id.nav_404_init:
+                break;
+            case R.id.nav_404_init_:
                 break;
             case R.id.map_master:
                 client.send("{\n" +

@@ -64,7 +64,11 @@ public class InitPoseResult {
         public static class PoseBeanX {
             /**
              * pose : {"position":{"x":0,"y":0,"z":0},"orientation":{"x":0,"y":0,"z":0,"w":1}}
-             * covariance : [0.25,0,0,0,0,0,0,0.25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.06853891945200942]
+             * covariance :
+             * 0.25,0,0,0,0,0,0,0.25,
+             * 0,0,0,0,0,0,0,0,0,0,0,
+             * 0,0,0,0,0,0,0,0,0,0,0,
+             * 0,0,0,0,0,0.06853891945200942
              */
 
             private PoseBean pose;
@@ -80,9 +84,17 @@ public class InitPoseResult {
 
             public void setCovariance() {
                 covariance = new ArrayList<Double>();
-                Double[] d = new Double[36];
                 for (int i = 0; i < 36; i++) {
-                    covariance.add(d[i]);
+                    if (i == 0) {
+                        covariance.add(0.25);
+                    } else if (i == 7) {
+                        covariance.add(0.25);
+                    } else if (i == 35) {
+                        covariance.add(0.06853891945200942);
+
+                    } else {
+                        covariance.add((double) 0);
+                    }
                 }
             }
 
@@ -118,31 +130,31 @@ public class InitPoseResult {
                      * z : 0
                      */
 
-                    private int x;
-                    private int y;
-                    private int z;
+                    private double x;
+                    private double y;
+                    private double z;
 
-                    public int getX() {
+                    public double getX() {
                         return x;
                     }
 
-                    public void setX(int x) {
+                    public void setX(double x) {
                         this.x = x;
                     }
 
-                    public int getY() {
+                    public double getY() {
                         return y;
                     }
 
-                    public void setY(int y) {
+                    public void setY(double y) {
                         this.y = y;
                     }
 
-                    public int getZ() {
+                    public double getZ() {
                         return z;
                     }
 
-                    public void setZ(int z) {
+                    public void setZ(double z) {
                         this.z = z;
                     }
                 }
@@ -155,40 +167,40 @@ public class InitPoseResult {
                      * w : 1
                      */
 
-                    private int x;
-                    private int y;
-                    private int z;
-                    private int w;
+                    private double x;
+                    private double y;
+                    private double z;
+                    private double w;
 
-                    public int getX() {
+                    public double getX() {
                         return x;
                     }
 
-                    public void setX(int x) {
+                    public void setX(double x) {
                         this.x = x;
                     }
 
-                    public int getY() {
+                    public double getY() {
                         return y;
                     }
 
-                    public void setY(int y) {
+                    public void setY(double y) {
                         this.y = y;
                     }
 
-                    public int getZ() {
+                    public double getZ() {
                         return z;
                     }
 
-                    public void setZ(int z) {
+                    public void setZ(double z) {
                         this.z = z;
                     }
 
-                    public int getW() {
+                    public double getW() {
                         return w;
                     }
 
-                    public void setW(int w) {
+                    public void setW(double w) {
                         this.w = w;
                     }
                 }
