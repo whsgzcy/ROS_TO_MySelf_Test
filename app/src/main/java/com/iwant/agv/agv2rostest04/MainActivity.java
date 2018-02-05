@@ -217,29 +217,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 导航
         Button n_400 = (Button) findViewById(R.id.nav_400_go);
         Button n_400_ = (Button) findViewById(R.id.nav_400_go_go);
+        Button n_400_init = (Button) findViewById(R.id.nav_400_init);
         n_400.setOnClickListener(this);
         n_400_.setOnClickListener(this);
+        n_400_init.setOnClickListener(this);
 
         // 导航
         Button n_401 = (Button) findViewById(R.id.nav_401_go);
         Button n_401_ = (Button) findViewById(R.id.nav_401_go_go);
+        Button n_401_init = (Button) findViewById(R.id.nav_401_init);
         n_401.setOnClickListener(this);
         n_401_.setOnClickListener(this);
+        n_401_init.setOnClickListener(this);
 
         Button n_402 = (Button) findViewById(R.id.nav_402_go);
         Button n_402_ = (Button) findViewById(R.id.nav_402_go_go);
+        Button n_402_init = (Button) findViewById(R.id.nav_402_init);
         n_402.setOnClickListener(this);
         n_402_.setOnClickListener(this);
+        n_402_init.setOnClickListener(this);
 
         Button n_403 = (Button) findViewById(R.id.nav_403_go);
         Button n_403_ = (Button) findViewById(R.id.nav_403_go_go);
+        Button n_403_init = (Button) findViewById(R.id.nav_403_init);
         n_403.setOnClickListener(this);
         n_403_.setOnClickListener(this);
+        n_403_init.setOnClickListener(this);
 
         Button n_404 = (Button) findViewById(R.id.nav_404_go);
         Button n_404_ = (Button) findViewById(R.id.nav_404_go_go);
+        Button n_404_init = (Button) findViewById(R.id.nav_404_init);
         n_404.setOnClickListener(this);
         n_404_.setOnClickListener(this);
+        n_404_init.setOnClickListener(this);
 
         Button charge = (Button) findViewById(R.id.test_navi_f);
         charge.setOnClickListener(this);
@@ -302,6 +312,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_400_map")));
                 mPointName = "map_4_A_400_map";
                 break;
+            case R.id.nav_400_init:
+                if(mNavPointName == null) return;
+                TMove_Base_Goal t = mNavPublich.getNavPublishHashMap().get(mNavPointName);
+                break;
             case R.id.nav_401_go:
                 mNavPointName = "map_4_A_401";
                 mNavPointState = 1;
@@ -313,6 +327,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mNavPointState = 1;
                 client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_401_map")));
                 mPointName = "map_4_A_401_map";
+                break;
+            case R.id.nav_401_init:
                 break;
             case R.id.nav_402_go:
                 mNavPointName = "map_4_A_402";
@@ -326,7 +342,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_402_map")));
                 mPointName = "map_4_A_402_map";
                 break;
-
+            case R.id.nav_402_init:
+                break;
             case R.id.nav_403_go:
                 mNavPointName = "map_4_A_403";
                 mNavPointState = 1;
@@ -339,7 +356,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_403_map")));
                 mPointName = "map_4_A_403_map";
                 break;
-
+            case R.id.nav_403_init:
+                break;
             case R.id.nav_404_go:
                 mNavPointName = "map_4_A_404";
                 mNavPointState = 1;
@@ -351,6 +369,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mNavPointState = 1;
                 client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_404_map")));
                 mPointName = "map_4_A_404_map";
+                break;
+            case R.id.nav_404_init:
                 break;
             case R.id.map_master:
                 client.send("{\n" +
@@ -370,7 +390,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         "\t}\n" +
                         "}");
                 break;
-                case R.id.initpose:
+            case R.id.initpose:
                 client.send("{\n" +
                         "    \"op\": \"publish\",\n" +
                         "    \"topic\": \"/initialpose\",\n" +
@@ -446,8 +466,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 client.send(msg);
                 break;
             case R.id.nav_state:
-//                client.send("{" + "\"op\": \"subscribe\"," + "\"topic\": \"/move_base/status\"," + "\"throttle_rate\": 1888" + "}");
-                client.send("{\"op\":\"subscribe\",\"topic\":\"/nav_ctrl_status\"}");
+                client.send("{" + "\"op\": \"subscribe\"," + "\"topic\": \"/move_base/status\"," + "\"throttle_rate\": 1888" + "}");
+//                client.send("{\"op\":\"subscribe\",\"topic\":\"/nav_ctrl_status\"}");
                 break;
             case R.id.stop_nav_state:
                 Log.d("click", NavHelper.getTime());
@@ -571,15 +591,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d(TAG, "MainAcitvity response = " + event.msg);
 
 
-        if(event.name.equals("/nav_ctrl_status")){
-
-
-
+        if (event.name.equals("/nav_ctrl_status")) {
             mStateTextView.setText(event.msg);
-
-
-
-
+            Log.d("yuu", event.msg);
         }
 
         // 事实的数据 为单点导航使用
