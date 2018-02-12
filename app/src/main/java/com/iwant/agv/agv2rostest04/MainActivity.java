@@ -280,21 +280,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        Button poiCancelBtn = (Button) findViewById(R.id.nav_poi_cancel);
 //        poiCancelBtn.setOnClickListener(this);
 
+        Button gmapping_pose = (Button) findViewById(R.id.gmapping_pose);
+        gmapping_pose.setOnClickListener(this);
+
+        Button save_map = (Button) findViewById(R.id.save_map);
+        save_map.setOnClickListener(this);
 
         Button load_map = (Button) findViewById(R.id.load_map);
         load_map.setOnClickListener(this);
 
-        Button load_map_edit = (Button) findViewById(R.id.load_map_edit);
-        load_map_edit.setOnClickListener(this);
-
-        Button save_as_map = (Button) findViewById(R.id.save_as_map);
-        save_as_map.setOnClickListener(this);
-
         Button save_map_edit = (Button) findViewById(R.id.save_map_edit);
         save_map_edit.setOnClickListener(this);
-
-        Button map_edit_done = (Button) findViewById(R.id.map_edit_done);
-        map_edit_done.setOnClickListener(this);
 
         // 注册广播
         IntentFilter intentFilter = new IntentFilter();
@@ -706,20 +702,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.nav_ctrl_2:
                 client.send("{\"op\": \"publish\",\"topic\": \"/nav_ctrl\",\"msg\": {\"control\": 2,\"goal_name\": \"\"}}");
                 break;
+            case R.id.gmapping_pose:
+                client.send("{\"op\":\"publish\",\"topic\":\"/cmd_string\",\"msg\":{\"data\":\"gmapping_pose\"}}");
+                break;
+            case R.id.save_map:
+                client.send("{\"op\":\"publish\",\"topic\":\"/cmd_string\",\"msg\":{\"data\":\"save_map\"}}");
+                break;
             case R.id.load_map:
                 client.send("{\"op\":\"publish\",\"topic\":\"/cmd_string\",\"msg\":{\"data\":\"load_map\"}}");
                 break;
-            case R.id.load_map_edit:
-                client.send("{\"op\":\"publish\",\"topic\":\"/cmd_string\",\"msg\":{\"data\":\"load_map_edit\"}}");
-                break;
-            case R.id.save_as_map:
-                client.send("{\"op\":\"publish\",\"topic\":\"/cmd_string\",\"msg\":{\"data\":\"save_as_map\"}}");
-                break;
             case R.id.save_map_edit:
                 client.send("{\"op\":\"publish\",\"topic\":\"/cmd_string\",\"msg\":{\"data\":\"save_map_edit\"}}");
-                break;
-            case R.id.map_edit_done:
-                client.send("{\"op\":\"publish\",\"topic\":\"/cmd_string\",\"msg\":{\"data\":\"map_edit_done\"}}");
                 break;
         }
     }
