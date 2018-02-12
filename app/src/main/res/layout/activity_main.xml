@@ -359,6 +359,36 @@
                     android:layout_height="wrap_content"
                     android:text="nav_ctrl_2" />
 
+                <Button
+                    android:id="@+id/load_map"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="load_map" />
+
+                <Button
+                    android:id="@+id/load_map_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="load_map_edit" />
+
+                <Button
+                    android:id="@+id/save_as_map"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="save_as_map" />
+
+                <Button
+                    android:id="@+id/save_map_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="save_map_edit" />
+
+                <Button
+                    android:id="@+id/map_edit_done"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="map_edit_done" />
+
             </LinearLayout>
         </RelativeLayout>
     </ScrollView>
