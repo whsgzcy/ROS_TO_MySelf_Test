@@ -1,6 +1,7 @@
 package com.helper;
 
 import com.google.gson.Gson;
+import com.iwant.agv.agv2rostest04.model.NavCtrl;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -30,5 +31,14 @@ public class NavHelper {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd HH:mm:ss.SSS");
         msg += "[" + sdf.format(date) + "]";
         return msg;
+    }
+
+    public static String nav(int control,String pointName){
+        NavCtrl na = new NavCtrl();
+        NavCtrl.MsgBean nam = new NavCtrl.MsgBean();
+        nam.setControl(control);
+        nam.setGoal_name(pointName);
+        na.setMsg(nam);
+        return new Gson().toJson(na);
     }
 }

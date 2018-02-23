@@ -314,11 +314,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mNavPointState = 1;
                 client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_400")));
                 mPointName = "map_4_A_400";
-                if (binder == null) {
-                    // 开始导航
-                    Intent intent = new Intent(this, PostionMonitorService.class);
-                    bindService(intent, conn, BIND_AUTO_CREATE);
-                }
+                client.send(NavHelper.nav(1, "map_4_A_400"));
+//                if (binder == null) {
+//                    // 开始导航
+//                    Intent intent = new Intent(this, PostionMonitorService.class);
+//                    bindService(intent, conn, BIND_AUTO_CREATE);
+//                }
                 break;
 //            case R.id.nav_poi_cancel:
 //                unbindService(conn);
@@ -328,12 +329,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mNavPointState = 1;
                 client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_400")));
                 mPointName = "map_4_A_400";
+                client.send(NavHelper.nav(1, "map_4_A_400"));
                 break;
             case R.id.nav_400_go_go:
                 mNavPointName = "map_4_A_400_map";
                 mNavPointState = 1;
                 client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_400_map")));
                 mPointName = "map_4_A_400_map";
+                client.send(NavHelper.nav(1, "map_4_A_400_map"));
                 break;
             case R.id.nav_400_init:
                 TMove_Base_Goal o = mNavPublich.getNavPublishHashMap().get("map_4_A_400");
@@ -392,16 +395,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 client.send(new Gson().toJson(oi_));
                 break;
             case R.id.nav_401_go:
-                mNavPointName = "map_4_A_401";
-                mNavPointState = 1;
-                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_401")));
-                mPointName = "map_4_A_401";
+//                mNavPointName = "map_4_A_401";
+//                mNavPointState = 1;
+//                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_401")));
+//                mPointName = "map_4_A_401";
+                client.send(NavHelper.nav(1, "map_4_A_401"));
+
                 break;
             case R.id.nav_401_go_go:
-                mNavPointName = "map_4_A_401_map";
-                mNavPointState = 1;
-                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_401_map")));
-                mPointName = "map_4_A_401_map";
+//                mNavPointName = "map_4_A_401_map";
+//                mNavPointState = 1;
+//                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_401_map")));
+//                mPointName = "map_4_A_401_map";
+                client.send(NavHelper.nav(1, "map_4_A_401_map"));
                 break;
             case R.id.nav_401_init:
                 TMove_Base_Goal ao = mNavPublich.getNavPublishHashMap().get("map_4_A_401");
@@ -449,16 +455,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 client.send(new Gson().toJson(aoi_));
                 break;
             case R.id.nav_402_go:
-                mNavPointName = "map_4_A_402";
-                mNavPointState = 1;
-                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_402")));
-                mPointName = "map_4_A_402";
+//                mNavPointName = "map_4_A_402";
+//                mNavPointState = 1;
+//                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_402")));
+//                mPointName = "map_4_A_402";
+                client.send(NavHelper.nav(1, "map_4_A_402"));
                 break;
             case R.id.nav_402_go_go:
-                mNavPointName = "map_4_A_402_map";
-                mNavPointState = 1;
-                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_402_map")));
-                mPointName = "map_4_A_402_map";
+//                mNavPointName = "map_4_A_402_map";
+//                mNavPointState = 1;
+//                client.send(new Gson().toJson(mNavPublich.getNavPublishHashMap().get("map_4_A_402_map")));
+//                mPointName = "map_4_A_402_map";
+                client.send(NavHelper.nav(1, "map_4_A_402_map"));
                 break;
             case R.id.nav_402_init:
                 TMove_Base_Goal bo = mNavPublich.getNavPublishHashMap().get("map_4_A_402");
@@ -704,6 +712,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.gmapping_pose:
                 client.send("{\"op\":\"publish\",\"topic\":\"/cmd_string\",\"msg\":{\"data\":\"gmapping_pose\"}}");
+                client.send("{\"op\":\"publish\",\"topic\":\"/cmd_string\",\"msg\":{\"data\":\"save_map\"}}");
+                client.send("{\"op\":\"publish\",\"topic\":\"/cmd_string\",\"msg\":{\"data\":\"load_map\"}}");
+                client.send("{\"op\":\"publish\",\"topic\":\"/cmd_string\",\"msg\":{\"data\":\"save_map_edit\"}}");
                 break;
             case R.id.save_map:
                 client.send("{\"op\":\"publish\",\"topic\":\"/cmd_string\",\"msg\":{\"data\":\"save_map\"}}");
