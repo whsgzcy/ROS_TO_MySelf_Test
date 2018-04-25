@@ -25,7 +25,6 @@ import com.jilk.ros.ROSClient;
 import com.jilk.ros.rosbridge.ROSBridgeClient;
 import com.map.WayPointUtil;
 import com.model.InitPoseResult;
-import com.nav.Move_Base_Status;
 import com.nav.NavPublich;
 import com.nav.TMove_Base_Goal;
 import com.service.PostionMonitorService;
